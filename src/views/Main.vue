@@ -155,5 +155,8 @@ export default {};
   margin-top:-15px; 
   margin-right: 100px;
 }
+.el-main{
+  background: #f0f2f5;
+}
 
 </style>
