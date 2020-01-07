@@ -10,8 +10,8 @@
             <el-input type="text" v-model="ruleForm.UserPwd" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item>
-            <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
-        <el-button @click="resetForm('ruleForm')">重置</el-button>
+            <el-button type="primary" @click="submitForm('ruleForm')">登陆</el-button>
+        <!-- <el-button @click="resetForm('ruleForm')">重置</el-button> -->
         </el-form-item>
       </el-form>
       <!-- <el-button :plain="true" @click="open2">成功</el-button> -->
@@ -21,7 +21,8 @@
 </template>
   
 <script>
-import http from '../util/request'
+import axios from '../util/axiosAgain';
+import cookie from 'js-cookie';
 //el-icon-user
 export default {
     data() {
@@ -67,11 +68,12 @@ export default {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                     let {   UserPwd,  UserName } = this._data.ruleForm;
-                    http.post('/user/login', {'user_name':UserName, "user_pwd":UserPwd}).then((res)=>{
-                        console.log(UserName, UserPwd, res)
+                    axios.post('/user/login', {'user_name':UserName, "user_pwd":UserPwd }).then((res)=>{
+                        console.log(res)
                         if(res.data.code === 1){
+                            cookie.set('token', res.data.token)
                             this.$message({
-                                message: '恭喜你，这是一条成功消息',
+                                message: '恭喜你，登录成功！',
                                 type: 'success', 
                                 onClose:function(){ _this.$router.push('/main') }
                             });
@@ -84,9 +86,9 @@ export default {
                 }
             });
         },
-        resetForm(formName) {
-            this.$refs[formName].resetFields();
-        }
+        // resetForm(formName) {
+        //     this.$refs[formName].resetFields();
+        // }
     }
 };
 </script>

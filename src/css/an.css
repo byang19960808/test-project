@@ -32,7 +32,7 @@ body,
 }
 .el-header{
     height: 150px;
-    background: aqua;
+    background: #fff;
 }
 .el-aside{
     background: #ccc;
@@ -44,6 +44,13 @@ body,
   top: 30%;
   width: 400px;
   height: 300px;
-  background: blueviolet;
+  background: #ccc;
   padding: 12px;
+}
+.el-form-item__content{
+    text-align: center;
+}
+.el-button--primary{
+    text-align: center;
+    width: 150px;
 }
