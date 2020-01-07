@@ -57,7 +57,7 @@
             <el-submenu index="4">
               <template slot="title"><i class="el-icon-setting"></i><span>班级管理</span> </template>
               <el-menu-item index="3-1">
-                <router-link to="/main/classlist">班级管理</router-link>
+                <router-link to="/main/grade">班级管理</router-link>
               </el-menu-item>
               <el-menu-item index="3-2">
                 <router-link to="/main/room">教室管理</router-link>
@@ -95,7 +95,8 @@ export default {};
 .el-header {
   height: 70px !important;
   line-height: 105px;
-  border-bottom: 1px solid #eee
+  border-bottom: 1px solid #eee;
+  background: #fff;
 }
 .logo {
   width: 200px;
@@ -153,5 +154,5 @@ export default {};
   margin-top:-15px; 
   margin-right: 100px;
 }
- 
+
 </style>

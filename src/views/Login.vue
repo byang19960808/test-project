@@ -28,10 +28,7 @@ export default {
         let validateUser = (rule, value, callback) => {
             if (value === '') {
                 callback(new Error('请输入用户名'));
-            } else {
-                // if (this.ruleForm.checkPass !== '') {
-                //     this.$refs.ruleForm.validateField('UserName');
-                // }
+            } else { 
                 callback();
             }
         };
@@ -67,7 +64,7 @@ export default {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                     let {   UserPwd,  UserName } = this._data.ruleForm;
-                    http.post('/user/login', {'user_name':UserName, "user_pwd":UserPwd}).then((res)=>{
+                    http.post('/api//user/login', {'user_name':UserName, "user_pwd":UserPwd}).then((res)=>{
                         console.log(UserName, UserPwd, res)
                         if(res.data.code === 1){
                             this.$message({
