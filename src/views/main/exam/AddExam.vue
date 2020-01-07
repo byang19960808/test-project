@@ -1,15 +1,8 @@
+<!--  -->
 <template>
-  <div>
-      添加试卷
-  </div>
+  <div class=''>添加考试</div>
 </template>
 
-<script>
-export default {
-
-}
-</script>
-
-<style>
+<style scoped lang='scss'>
 
 </style>

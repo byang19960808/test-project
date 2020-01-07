@@ -1,8 +1,8 @@
 <template>
   <div>
-    <el-table :data="examList"
+    <el-table 
               style="width: 100%"
-              :row-class-name="tableRowClassName">
+              >
       <el-table-column prop="grade_name"
                        label="班级名"
                        width="180">
@@ -31,5 +31,4 @@
     </el-table>
   </div>
 </template>
-
 
