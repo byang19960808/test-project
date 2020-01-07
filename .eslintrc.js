@@ -27,7 +27,7 @@ module.exports = {
       "vars": "all",
       "args": "after-used"
     }], //不能有声明后未被使用的变量或参数
-    "camelcase": 2, //强制驼峰法命名
+    // "camelcase": 2, //强制驼峰法命名
     "curly": [2, "all"], //必须使用 if(){} 中的{}
     "default-case": 2, //switch语句最后必须有default
     "eqeqeq": 2, //必须使用全等
