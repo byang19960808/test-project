@@ -54,3 +54,14 @@ body,
     text-align: center;
     width: 150px;
 }
+.questionType_form{
+    margin-top: 20px;
+    padding:24px;
+    background: #fff;
+}
+.questionType_form .el-button--primary {
+    margin: 24px;
+}
+.questionType_form .el-table{
+    margin: 10px 24px 24px 24px;
+}
