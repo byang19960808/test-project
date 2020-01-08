@@ -1,59 +1,38 @@
 <template>
-  <div class="wrap_mark">
-    <div class="mark_from">
-      <div class="from-header">
-        <div>添加班级</div>
-        <div><i data-v-79bf621a=""
-             @click.self="heidenFlag"
-             class="el-icon-close"></i></div>
+   <div class="wrap_mark">
+      <div class="mark_from">
+           <div class="from-header">
+              <div>添加班级</div>
+             <div><i data-v-79bf621a=""  @click.self="heidenFlag" class="el-icon-close"></i></div>
+           </div>
+           <div class="from-main">
+            <!-- 提价表单 -->
+            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+                    <el-form-item  label="班级名"   prop="class"></el-form-item>
+                       <el-input :disabled="AddorSet" v-model="ruleForm.class"></el-input>
+                    <el-form-item   label="教室号" prop="classroom"></el-form-item>
+                       <el-select v-model="ruleForm.classroom" style="width:100%"  placeholder="请选择教室号">
+                        <el-option style="z-index:2500" v-for="(item,index) in AllClassRoom" :key="index" :label="item.room_text" :value="item.room_id"></el-option>
+                       </el-select>                                      
+                    <el-form-item   label="课程名" prop="subject"></el-form-item>
+                       <el-select v-model="ruleForm.subject" style="width:100%"  placeholder="请选择课程名">
+                         <el-option style="z-index:2500" v-for="(item,index) in Allsubject" :key="index" :label="item.subject_text" :value="item.subject_id"></el-option>
+                       </el-select>
+            </el-form>
+            <!-- 提价表单 -->
+           </div>
+           <div class="from-footer">
+              <el-button @click="hideenFlag" >取消</el-button>
+              <el-button @click="submitClick" type="primary">提交</el-button>
+           </div>
       </div>
-      <div class="from-main">
-        <!-- 提价表单 -->
-        <el-form :model="ruleForm"
-                 :rules="rules"
-                 ref="ruleForm"
-                 label-width="100px"
-                 class="demo-ruleForm">
-          <el-form-item label="班级名"
-                        prop="name"></el-form-item>
-          <el-input :disabled="AddorSet"
-                    v-model="ruleForm.class"></el-input>
-          <el-form-item label="教室号"
-                        prop="name"></el-form-item>
-          <el-select v-model="ruleForm.classroom"
-                     style="width:100%"
-                     placeholder="请选择教室号">
-            <el-option style="z-index:2500"
-                       v-for="(item,index) in AllClassRoom"
-                       :key="index"
-                       :label="item.room_text"
-                       :value="item.room_id"></el-option>
-          </el-select>
-          <el-form-item label="课程名"
-                        prop="name"></el-form-item>
-          <el-select v-model="ruleForm.subject"
-                     style="width:100%"
-                     placeholder="请选择课程名">
-            <el-option style="z-index:2500"
-                       v-for="(item,index) in Allsubject"
-                       :key="index"
-                       :label="item.subject_text"
-                       :value="item.subject_id"></el-option>
-          </el-select>
-        </el-form>
-        <!-- 提价表单 -->
-      </div>
-      <div class="from-footer">
-        <el-button @click="hideenFlag" >取消</el-button>
-        <el-button @click="addClass"
-                   class="submitClick"
-                   type="primary">提交</el-button>
-      </div>
-    </div>
-  </div>
+   </div>
 </template>
 <script>
+import axios  from "../..//util/axiosAgain"
+import {mapActions} from "vuex"
 export default {
+    props:["AllClassRoom", "Allsubject"],
     data() {
         return {
             ruleForm: { class: "", classroom: "", subject: "" },
@@ -77,8 +56,54 @@ export default {
         hideenFlag() {
             // 取消按钮关闭
             this.$emit("update:FromFlag", false);
-        }
+        },
+        ...mapActions({
+            getIfClassRoom:"setClass/getIfClassRoom"
+        }),
+        submitClick(){
+            if(!this.AddorSet){
+                axios.post("/manger/grade", {grade_name:this.ruleForm.class, room_id:this.ruleForm.classroom, subject_id:this.ruleForm.subject}).then(res=>{
+                    alert(res.data.msg)
+                    this.heidenFlag()
+                    this.getIfClassRoom()
+                })
+            }else{
+                console.log({grade_id:localStorage.getItem("grade_id"), room_id:this.ruleForm.classroom, subject_id:this.ruleForm.subject});
+                axios.put("/manger/grade/update", {
+                    grade_id:localStorage.getItem("grade_id"),
+                    room_id:this.ruleForm.classroom,
+                    subject_id:this.ruleForm.subject
+                }).then(res=>{
+                    console.log(res);
+                    this.getIfClassRoom()
+                    this.clearLocal()    
+                    this.heidenFlag()
+                })
+            }
+           
+        },
+        clearLocal(){
+            localStorage.removeItem("grade_name")
+            localStorage.removeItem("room_text")
+            localStorage.removeItem("subject_text")
+            localStorage.removeItem("grade_id")
+        },
+        setruleForm(){
+            if(localStorage.getItem('grade_name') && localStorage.getItem('subject_text') && localStorage.getItem('room_text')){
+                this.ruleForm.class = localStorage.getItem('grade_name')
+                this.ruleForm.classroom = localStorage.getItem('room_text')
+                this.ruleForm.subject = localStorage.getItem('subject_text')
+                this.AddorSet = true
+            }else{
+                this.AddorSet = false
+            }
+        },
+        
+    },
+    created() {
+        this.setruleForm()
     }
+    
 };
 </script>
 <style scoped  lang="scss">

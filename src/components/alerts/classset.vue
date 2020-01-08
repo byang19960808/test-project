@@ -53,9 +53,9 @@ export default {
     },
     methods: {
         ...mapActions({
-            getAllClassRoom: "setClass/getAllClassRoom",
             addClassRoom: "setClass/addClassRoom",
-            getIfClassRoom: "setClass/getIfClassRoom"
+            getIfClassRoom: "setClass/getIfClassRoom",
+            getAllClassRoom:"setClass/getAllClassRoom"
         }),
         heidenFlag() {
             // 箭头关闭
@@ -68,18 +68,15 @@ export default {
         addClass() {
             //   提交按钮
             this.addClassRoom({
-                Roomtext: this.ruleForm.Class
+                room_text: this.ruleForm.Class
             }).then(res => {
                 console.log(res)
-                this.getAllClassRoom();
                 this.$emit("update:FromFlag", false);
+                this.getAllClassRoom()
             });
         }
     },
     created() {
-        console.log(111);
-        
-        this.getIfClassRoom()
     },
 };
 </script>
