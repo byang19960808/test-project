@@ -33,7 +33,7 @@
         <span><el-input v-model="input" placeholder="请输入类型名称"></el-input></span>
         <span slot="footer" class="dialog-footer">
           <el-button @click="centerDialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="centerDialogVisible">确 定</el-button>
+          <el-button type="primary" @click="affirm">确 定</el-button>
         </span>
       </el-dialog>
    
@@ -51,16 +51,39 @@ export default {
         }
     }, 
     mounted(){
-        axios.get('/exam/getQuestionsType').then((res)=>{
-            console.log(res)
-            if(res.data.code === 1){
-                console.log(this)
-                this.$data.tableData = res.data.data
-            }
-        })
+        this.getData()
     }, 
     methods:{
-
+        affirm(){
+            let { input, tableData } = this.$data ;
+            if(input.trim() !== ""){
+                axios.get('/exam/insertQuestionsType', {text:input, sort: tableData.length + 1}).then((res) =>{
+                    if(res.data.code === 1){
+                        this.$message({
+                            message: '数据插入成功',
+                            type: 'success',
+                        });
+                        this.$data.centerDialogVisible = false;
+                        this.getData()
+                    }  
+                })
+            }else{
+                this.$message({
+                    message: '输入内容为空！',
+                    type: 'warning',
+                });
+                this.$data.centerDialogVisible = false;
+            }
+        },
+        getData(){
+            axios.get('/exam/getQuestionsType').then((res)=>{
+                console.log(res)
+                if(res.data.code === 1){
+                    console.log(this)
+                    this.$data.tableData = res.data.data
+                }
+            })
+        }
     }
 }
 </script>

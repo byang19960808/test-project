@@ -49,5 +49,11 @@ export default {
     },
     post(url, params) {
         return axios.post(url, params)
+    },
+    delete(url, data){
+        return axios.delete(url, {data})
+    },
+    put(url, params){
+        return axios.put(url, params)
     }
 }

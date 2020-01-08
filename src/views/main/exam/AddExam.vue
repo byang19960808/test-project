@@ -1,8 +1,136 @@
 <!--  -->
 <template>
-  <div class=''>添加考试</div>
+  <div class='addExam'>
+    <h1>添加考试</h1>
+    <div>
+        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+        <el-form-item label="考试名称" prop="name">
+          <el-input v-model="ruleForm.name"></el-input>
+        </el-form-item>
+        <el-form-item label="考试类型" prop="type">
+          <el-select v-model="ruleForm.type" placeholder="请选择考试类型">
+            <el-option label="周考1" value="8sc5d7-7p5f9e-cb2zii-ahe5i"></el-option>
+            <el-option label="周考2" value="jpg8y9-zbzt7o-jpvuhf-fwnjvr"></el-option>
+            <el-option label="周考3" value="ukmp9b-radddj-ogwdr-nw3ane"></el-option>
+            <el-option label="月考" value="wbxm4-jf8q6k-lvt2ca-ze96mg"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="选择课程" prop="region">
+          <el-select v-model="ruleForm.region" placeholder="请选择课程">
+           
+            <el-option label="JavaScript上" value="fqtktr-1lq5u"></el-option>
+            <el-option label="JavaScript下" value="wl5yk-38c0g"></el-option>
+            <el-option label="模块化开发" value="8tl7os-r49tld"></el-option>
+            <el-option label="移动端开发" value="1ux00o6-2xbj5i"></el-option>
+            <el-option label="node基础" value="4pu32-vs796l"></el-option>
+            <el-option label="组件化开发(vue)" value="1psw2b-cy7o07(vue)"></el-option>
+            <el-option label="渐进式开发(react)" value="fyu3ln-azjkie(react)"></el-option>
+             <el-option label="项目实战" value="94sjh6-lnlxe"></el-option>
+            <el-option label="JavaScript高级" value="k1gvd4-8lrx8f"></el-option>
+            <el-option label="node高级" value="u3ix15-dd6md"></el-option>
+          </el-select>
+        </el-form-item>
+         <el-form-item label="设置题量" prop="num">
+         <el-input-number v-model="ruleForm.num" controls-position="right" @change="handleChange" :min="3" :max="40"></el-input-number>
+        </el-form-item>
+       
+        <el-form-item label="选择开始时间" prop="date1">
+        <div class="block">
+        
+            <el-date-picker
+              v-model="ruleForm.date1"
+              type="datetime"
+              placeholder="开始时间">
+            </el-date-picker>
+          </div>
+        </el-form-item>
+         
+          <el-form-item label="选择结束时间" prop="date2">
+        <div class="block">
+           
+            <el-date-picker
+              v-model="ruleForm.date2"
+              type="datetime"
+              placeholder="结束时间">
+            </el-date-picker>
+          </div>
+        </el-form-item>
+          
+        <el-form-item>
+          <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
+          <el-button @click="resetForm('ruleForm')">重置</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
+
+  </div>
+
 </template>
 
-<style scoped lang='scss'>
+<script>
+import axios from '../../../util/axiosAgain';
+export default {
+    data() {
+        return {
+            ruleForm: {
+                name: '',
+                region: '',
+                type:'',
+                num: 4,
+                date1:'',
+                date2:''
+            },
+            rules: {
+                name: [
+                    { required: true, message: '请输入试卷名称', trigger: 'blur' }
+                ],
+                region: [
+                    { required: true, message: '请选择考试课程', trigger: 'change' }
+                ],
+                type: [
+                    { required: true, message: '请选择考试类型', trigger: 'change' }
+                ],
+                date1: [
+                    { type: 'date', required: true, message: '请选择考试开始时间', trigger: 'change' }
+                ],
+                date2: [
+                    { type: 'date', required: true, message: '请选择考试结束时间', trigger: 'change' }
+                ],
+                num: [
+                    { required: true, message: '请选择题量', trigger: 'blur' },
+                ]
+            }
+        };
+    },
+    methods: {
+        submitForm(formName) {
+            this.$refs[formName].validate((valid) => {
+                if (valid) {
+                    let { name, region, type, date1, date2, num } = this.$data.ruleForm;
+                    console.log( name, region, type, date1 * 1, date2 * 1, num)
+                    axios.post('/exam/exam', {subject_id:region, exam_id:type, title:name, number:num, start_time:date1 * 1, end_time:date2 * 1}).then((res)=>{
+                        console.log(res)
+                    })
+                  
+                } else {
+                    console.log('error submit!!');
+                    return false;
+                }
+            });
+        },
+        resetForm(formName) {
+            this.$refs[formName].resetFields();
+        },
+        handleChange(value) {
+            console.log(value);
+        }
+    }
+  
+}
+</script>
 
+<style>
+    .el-form-item__content{
+      text-align: left;
+    }
 </style>
