@@ -5,12 +5,12 @@
       <div class="class-contniner">
         <!-- 添加按钮 -->
         <el-button type="primary"
-                   @click="open">+添加教室</el-button>
+                   @click="open">+添加班级</el-button>
         <!-- 添加按钮 -->
 
         <!-- 表单弹层 -->
         <FromMark v-if="FromFlag"
-                  :FromFlag.sync="FromFlag"></FromMark>
+                  :FromFlag.sync="FromFlag" :AllClassRoom="AllClassRoom" :Allsubject="Allsubject"></FromMark>
         <!-- 表单弹层 -->
 
         <!-- 表格 -->
@@ -45,6 +45,7 @@
 <script>
 //表单弹层
 import FromMark from "../../../components/alerts/index";
+import axios from "../../../util/axiosAgain"
 import { mapActions, mapState } from 'vuex';
 export default {
     components: {
@@ -52,7 +53,9 @@ export default {
     },
     data() {
         return {
-            FromFlag: false
+            FromFlag: false,
+            AllClassRoom:[],
+            Allsubject:[]
         };
     },
     computed:{
@@ -63,7 +66,8 @@ export default {
     methods: {
         ...mapActions({
             getAllClassRoom:"setClass/getAllClassRoom",   
-            getIfClassRoom: "setClass/getIfClassRoom"
+            getIfClassRoom: "setClass/getIfClassRoom",
+            deleteClass:"setClass/deleteClass",
         }),
         //编辑事件
         handleEdit(index, row) {
@@ -73,11 +77,27 @@ export default {
             localStorage.setItem("grade_id", row.grade_id);
             this.FromFlag = true;
         },
-        // //删除事件
-        // handleDelete(index, row) {},
+        //删除事件
+        handleDelete(index, row) {
+            this.deleteClass(row.grade_id).then(res=>{                
+                console.log(res)
+                this.getIfClassRoom()
+            })
+        },
         //添加弹出蒙层
         open() {
-            this.FromFlag = true;
+            this.FromFlag = true
+            this.getOptions()
+        },
+        getOptions(){
+            axios.get("/manger/room").then(res=>{
+                console.log(res, this.AllClassRoom)
+                this.AllClassRoom = res.data.data
+            }),
+            axios.get("/manger/grade").then(res=>{
+                console.log(res, this.Allsubject)
+                this.Allsubject = res.data.data
+            })
         }
     },
     created() {

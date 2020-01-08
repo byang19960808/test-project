@@ -1,4 +1,4 @@
-import { getAllClassRoom, addClassRoom, deleteClassRoom, getIfClassRoom} from'../../api/setClass'
+import { getAllClassRoom, addClassRoom, deleteClassRoom, getIfClassRoom, deleteClass} from'../../api/setClass'
 
 const state = {
     AllClassRoom:[], //全部教室数据
@@ -21,10 +21,14 @@ const actions = {
         //  添加教室
         await addClassRoom(palody)
     },
+    async deleteClass({commit}, palody){
+        console.log(commit)
+        // 删除班级
+        await deleteClass(palody)
+    },
     async getAllClassRoom({commit}){
         // 获取全部教室
         let res = await getAllClassRoom()
-        console.log(res.data.code);
         if(res.data.code === 1){
             commit("setAllClassRoom", res.data.data)
         }
@@ -32,16 +36,13 @@ const actions = {
     async deleteClassRoom({commit}, palody){
         //删除教室
         console.log(commit, 1111)
-        // let res = await getAllClassRoom()
-        // if(res.data.code === 1){
-        //     await deleteClassRoom(palody)
-        // }
         await deleteClassRoom(palody)
         
     },
     async getIfClassRoom({commit}){
         let res = await getIfClassRoom()
-        console.log(res.data.data);
+        let num = 0
+        console.log(res.data.data, num++);
         commit("setclassList", res.data.data)
     }
 }

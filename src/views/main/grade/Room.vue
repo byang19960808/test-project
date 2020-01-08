@@ -5,7 +5,7 @@
       <div class="class-contniner">
         <!-- 添加按钮 -->
         <el-button type="primary"
-                   @click="open">+添加班级</el-button>
+                   @click="open">+添加教室</el-button>
         <!-- 添加按钮 -->
         <!-- 表格 -->
         <el-table :data="AllClassRoom"
@@ -22,14 +22,15 @@
           </el-table-column>
           <!-- 操作 -->
         </el-table>
-        <!-- 表格 -->
       </div>
     </el-main>
     <!-- 添加弹框组件 --> 
     <OneFrom v-if="FromFlag"
              :FromFlag.sync="FromFlag"> </OneFrom>
     <!-- 添加弹框组件 -->
+    
   </el-container>
+  
 </template>
 <script>
 import { mapActions, mapState } from "vuex";

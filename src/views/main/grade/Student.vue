@@ -1,8 +1,9 @@
 <template>
   <div class="studentBox">
     <h2>学生管理</h2>
-    <div>
+    <div class="student_cont">
       <el-input placeholder="请输入学生姓名"></el-input>
+      <el-input placeholder="请输入学生学号"></el-input>
       <template>
         <el-select placeholder="请选择教室号">
           <el-option></el-option>
@@ -15,29 +16,16 @@
       <el-button type="primary">重置</el-button>
     </div>
     <div>
-      <el-table style="width: 100%">
-        <el-table-column prop="grade_name"
-                         label="姓名"
-                         width="180">
-        </el-table-column>
-
-        <el-table-column prop="subject_text"
-                         label="学号">
-        </el-table-column>
-
-        <el-table-column prop="state"
-                         label="班级">
-        </el-table-column>
-
-        <el-table-column prop="room_text"
-                         label="教室">
-        </el-table-column>
-
-        <el-table-column prop="room_text"
-                         label="密码">
-        </el-table-column>
-
+      <el-table style="width: 100%" :data="Allstudent">
+        <el-table-column prop="student_name" label="姓名" width="180"></el-table-column>
+        <el-table-column prop="student_id" label="学号"></el-table-column>
+        <el-table-column prop="state" label="班级"> </el-table-column>
+        <el-table-column prop="room_text" label="教室"></el-table-column>
+        <el-table-column prop="student_pwd"  label="密码"></el-table-column>
         <el-table-column label="操作">
+           <template slot-scope="scope">
+              <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+           </template>
         </el-table-column>
       </el-table>
     </div>
@@ -46,7 +34,33 @@
 </template>
 
 <script>
-export default {};
+import axios from "../../../util/axiosAgain"
+export default {
+    data(){
+        return{
+            Allstudent:[]
+        }
+    },
+    mounted(){
+        axios.get("/manger/student/new").then(res=>{
+            this.Allstudent = res.data.data
+        })
+    },
+    methods:{
+        handleDelete(index, row) {
+            axios.delete(`/manger/student/${row.student_id}`).then(res=>{
+                console.log(index, row, res);
+                if(res.data.code === 1){
+                    alert(res.data.msg)
+                    axios.get("/manger/student/new").then(res=>{
+                        this.Allstudent = res.data.data
+                    })
+                }
+                
+            })
+        }
+    }
+};
 </script>
 <style scoped>
 .studentBox {
@@ -67,7 +81,7 @@ h2 {
 .el-select {
   margin: 0 10px;
 }
-.el-button {
+.student_cont .el-button {
   background: linear-gradient(-90deg, #4e75ff, #0139fd) !important;
 }
 </style>
