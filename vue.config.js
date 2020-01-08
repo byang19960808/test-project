@@ -1,5 +1,6 @@
 module.exports = {
     devServer: {
+      open:true,
         proxy: {
             '/api': {
                 target: 'http://169.254.204.201:7001',

@@ -2,7 +2,7 @@
   <div class="wrap_mark">
     <div class="mark_from">
       <div class="from-header">
-        <div>添加班级</div>
+        <div>添加教室</div>
         <div><i data-v-79bf621a=""
              @click.self="heidenFlag"
              class="el-icon-close"></i></div>
@@ -14,7 +14,7 @@
                  ref="ruleForm"
                  label-width="100px"
                  class="demo-ruleForm">
-          <el-form-item label="班级名"
+          <el-form-item label="教室号"
                         prop="Class"></el-form-item>
           <el-input v-model="ruleForm.Class"></el-input>
         </el-form>

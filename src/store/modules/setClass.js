@@ -30,8 +30,14 @@ const actions = {
         }
     },
     async deleteClassRoom({commit}, palody){
-        console.log(commit, palody)
+        //删除教室
+        console.log(commit, 1111)
+        // let res = await getAllClassRoom()
+        // if(res.data.code === 1){
+        //     await deleteClassRoom(palody)
+        // }
         await deleteClassRoom(palody)
+        
     },
     async getIfClassRoom({commit}){
         let res = await getIfClassRoom()
