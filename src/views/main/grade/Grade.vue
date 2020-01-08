@@ -45,7 +45,7 @@
 <script>
 //表单弹层
 import FromMark from "../../../components/alerts/index";
-import { mapActions } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 export default {
     components: {
         FromMark
@@ -56,10 +56,10 @@ export default {
         };
     },
     computed:{
-        // ...mapState({
-        //     classRoomList: state=>state.StudentClassClassroomManagement.classRoomList,
-        //     AllClassRoom: state=>state.setClass.AllClassRoom
-        // })
+        ...mapState({
+            classRoomList: state=>state.StudentClassClassroomManagement.classRoomList,
+            AllClassRoom: state=>state.setClass.AllClassRoom
+        })
     },
     methods: {
         ...mapActions({
