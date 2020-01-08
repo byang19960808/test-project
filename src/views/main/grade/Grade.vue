@@ -14,7 +14,7 @@
         <!-- 表单弹层 -->
 
         <!-- 表格 -->
-        <el-table :data="classRoomList"
+        <el-table :data="classList"
                   style="width: 100%">
           <el-table-column prop="grade_name"
                            label="班级名"
@@ -57,16 +57,13 @@ export default {
     },
     computed:{
         ...mapState({
-            classRoomList: state=>state.StudentClassClassroomManagement.classRoomList,
-            AllClassRoom: state=>state.setClass.AllClassRoom
+            classList: state=>state.setClass.classList
         })
     },
     methods: {
         ...mapActions({
-            getIfClassRoom:"StudentClassClassroomManagement/getIfClassRoom",
-            deleteClass:"StudentClassClassroomManagement/deleteClass",
-            getsubject:"StudentClassClassroomManagement/getsubject", 
             getAllClassRoom:"setClass/getAllClassRoom",   
+            getIfClassRoom: "setClass/getIfClassRoom"
         }),
         //编辑事件
         handleEdit(index, row) {
@@ -82,6 +79,14 @@ export default {
         open() {
             this.FromFlag = true;
         }
+    },
+    created() {
+        this.getIfClassRoom()
     }
 };
 </script>
+<style scoped>
+*{
+   overflow: none !important;
+}
+</style>

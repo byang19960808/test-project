@@ -3,4 +3,10 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
-export default new Vuex.Store({ state: {}, mutations: {}, actions: {}, modules: {} })
+import setClass from './modules/setClass'
+
+export default new Vuex.Store({ modules: {
+
+    setClass
+
+} })
