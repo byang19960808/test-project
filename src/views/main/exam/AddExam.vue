@@ -9,16 +9,13 @@
         </el-form-item>
         <el-form-item label="考试类型" prop="type">
           <el-select v-model="ruleForm.type" placeholder="请选择考试类型">
-            <el-option label="周考1" value="8sc5d7-7p5f9e-cb2zii-ahe5i"></el-option>
-            <el-option label="周考2" value="jpg8y9-zbzt7o-jpvuhf-fwnjvr"></el-option>
-            <el-option label="周考3" value="ukmp9b-radddj-ogwdr-nw3ane"></el-option>
-            <el-option label="月考" value="wbxm4-jf8q6k-lvt2ca-ze96mg"></el-option>
+            <el-option v-for="(item, index) in examType"  :key="index" :label='item.exam_name' :value="item.exam_id"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="选择课程" prop="region">
           <el-select v-model="ruleForm.region" placeholder="请选择课程">
-           
-            <el-option label="JavaScript上" value="fqtktr-1lq5u"></el-option>
+             <el-option v-for="(item,index) in subject" :key='index' :label="item.subject_text" :value="item.subject_id"></el-option>
+            <!-- <el-option label="JavaScript上" value="fqtktr-1lq5u"></el-option>
             <el-option label="JavaScript下" value="wl5yk-38c0g"></el-option>
             <el-option label="模块化开发" value="8tl7os-r49tld"></el-option>
             <el-option label="移动端开发" value="1ux00o6-2xbj5i"></el-option>
@@ -27,7 +24,7 @@
             <el-option label="渐进式开发(react)" value="fyu3ln-azjkie(react)"></el-option>
              <el-option label="项目实战" value="94sjh6-lnlxe"></el-option>
             <el-option label="JavaScript高级" value="k1gvd4-8lrx8f"></el-option>
-            <el-option label="node高级" value="u3ix15-dd6md"></el-option>
+            <el-option label="node高级" value="u3ix15-dd6md"></el-option> -->
           </el-select>
         </el-form-item>
          <el-form-item label="设置题量" prop="num">
@@ -80,6 +77,8 @@ export default {
                 date1:'',
                 date2:''
             },
+            examType:[],
+            subject:[],
             rules: {
                 name: [
                     { required: true, message: '请输入试卷名称', trigger: 'blur' }
@@ -102,6 +101,14 @@ export default {
             }
         };
     },
+    mounted(){
+        axios.get('/exam/examType').then((res)=>{
+            this.$data.examType = res.data.data
+        })
+        axios.get('/exam/subject').then((res)=>{
+            this.$data.subject = res.data.data
+        })
+    },
     methods: {
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
@@ -109,7 +116,14 @@ export default {
                     let { name, region, type, date1, date2, num } = this.$data.ruleForm;
                     console.log( name, region, type, date1 * 1, date2 * 1, num)
                     axios.post('/exam/exam', {subject_id:region, exam_id:type, title:name, number:num, start_time:date1 * 1, end_time:date2 * 1}).then((res)=>{
-                        console.log(res)
+                        console.log(res.data)
+                        if(res.data.code === 1){
+                            this.$store.state.addExam.examSucess = res.data.data;
+                            this.$router.push('/main/exam/edit')
+                        }else{
+                            alert('创建试卷失败')
+                        }
+                      
                     })
                   
                 } else {
