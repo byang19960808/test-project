@@ -35,14 +35,14 @@ const actions = {
     },
     async deleteClassRoom({commit}, palody){
         //删除教室
-        console.log(commit, 1111)
+        console.log(commit, palody)
         await deleteClassRoom(palody)
         
     },
     async getIfClassRoom({commit}){
         let res = await getIfClassRoom()
-        let num = 0
-        console.log(res.data.data, num++);
+        // let num = 0
+        // console.log(res.data.data, num++);
         commit("setclassList", res.data.data)
     }
 }

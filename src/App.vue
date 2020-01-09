@@ -1,6 +1,10 @@
 <template>
   <div id="app">
-    <router-view/>
+    <router-view class="main"/>
   </div>
 </template>
-
+<style>
+.main{
+  overflow: hidden
+}
+</style>

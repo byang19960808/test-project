@@ -36,12 +36,13 @@
           <el-button type="primary" @click="affirm">确 定</el-button>
         </span>
       </el-dialog>
-   
+    <Page :item="{total,currentPage,pagesize}" :handleSizeChange="handleSizeChange" :handleCurrentChange="handleCurrentChange"></Page>
   </div>
 </template>
 
 <script>
 import axios from '../../../util/axiosAgain';
+import Page from "../../../components/paingdevice/Page"
 export default {
     data() {
         return {
@@ -84,6 +85,9 @@ export default {
                 }
             })
         }
+    },
+    components:{
+        Page
     }
 }
 </script>

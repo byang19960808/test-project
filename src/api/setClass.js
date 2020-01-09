@@ -14,4 +14,3 @@ export const getIfClassRoom = () => request.get('/manger/grade')
 
 // 删除班级接口
 export const deleteClass = (id)=>request.delete('/manger/grade/delete', {grade_id:id})
-

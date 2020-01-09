@@ -20,11 +20,11 @@ body,
 }
 .login-form{
     position: absolute;
-    right: 100px;
+    right: 39.5% !important;
     top: 30%;
     width: 400px;
     height: 300px;
-    background: #ccc;
+    background-color: rgba(200, 54, 54, 0.3) !important;
     padding: 12px;
 }
 .main,.el-container{

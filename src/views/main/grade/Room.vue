@@ -17,11 +17,13 @@
           <!-- 操作 -->
           <el-table-column label="操作">
             <template slot-scope="scope">
-              <span @click="handleDelete(scope.$index, scope.row)">删除</span>
+              <el-button type="danger" size="mini" @click="opens(scope.$index, scope.row)">删除</el-button>
             </template>
           </el-table-column>
           <!-- 操作 -->
         </el-table>
+    <!-- <Page :item="{total,currentPage,pagesize}" :handleSizeChange="handleSizeChange" :handleCurrentChange="handleCurrentChange"></Page> -->
+
       </div>
     </el-main>
     <!-- 添加弹框组件 --> 
@@ -35,9 +37,12 @@
 <script>
 import { mapActions, mapState } from "vuex";
 import OneFrom from "../../../components/alerts/classset";
+//公共的分页器
+// import Page from "../../../components/paingdevice/Page"
 export default {
     components: {
-        OneFrom
+        OneFrom,
+        // Page
     },
     data() {
         return {
@@ -57,10 +62,24 @@ export default {
         open() {
             this.FromFlag = true;
         },
-        handleDelete(index, item) {
-            this.deleteClassRoom(item.room_id).then(res => {
-                console.log(res)
-                this.getAllClassRoom();
+        opens(index, item) {
+            this.$confirm('此操作将永久删除, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning',
+                center: true
+            }).then(() => {
+                this.deleteClassRoom(item.room_id),
+                this.getAllClassRoom()
+                this.$message({
+                    type: 'success',
+                    message: '删除成功!'
+                })
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消删除'
+                });
             });
         }
     },

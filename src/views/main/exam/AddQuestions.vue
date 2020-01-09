@@ -1,92 +1,111 @@
 <template>
-  <el-container>
-    <el-header>
-      <h2>添加试题</h2>
-    </el-header>
-  </el-container>
+  <div class="questionWrap">
+    <h1>添加试题</h1>
+    <div class="allList">
+      <p>题目信息</p>
+      <p>题干</p>
+      <el-input v-model="inputs" maxlength="20" placeholder="请输入题目标题，不超过20个字"></el-input>
+      <p>题目主题</p>
+      <mark-down style="height:360px;" />
+      <p>请选择考试类型：</p>
+      <el-select v-model="examType" placeholder="请选择" style='width:300px'>
+        <el-option
+          v-for="item in examTypeList"
+        :key="item.exam_id"
+        :label="item.exam_name"
+        :value="item.exam_name"
+        ></el-option>
+      </el-select>
+      
+      <p>请选择课程类型：</p>
+      <el-select v-model="course" placeholder="请选择" style='width:300px'>
+        <el-option
+        v-for="item in allcourse"
+        :key="item.subject_id"
+        :label="item.subject_text"
+        :value="item.subject_text"
+        ></el-option>
+      </el-select>
+      <p>请选择题目类型：</p>
+      <el-select v-model="questiontypes" placeholder="请选择" style='width:300px'>
+        <el-option
+        v-for="item in questionTypesList"
+        :key="item.questions_type_id"
+        :label="item.questions_type_text"
+        :value="item.questions_type_text"
+        ></el-option>
+      </el-select>
+      <p>答案信息</p>
+      <mark-down style="height:360px;" />
+      <el-button type="primary" style='width:150px;'>提交</el-button>
+    </div>
+  </div>
 </template>
-
-<style scoped lang="scss">
-el-container {
+<script>
+import MarkDown from 'vue-meditor';
+import axios from "../../../util/axiosAgain"
+export default {
+    components: {
+        MarkDown
+    },
+    data() {
+        return {
+            inputs: "",
+            allcourse:[],
+            course:"",
+            examTypeList:[],
+            examType:"",
+            questionTypesList:[],
+            questiontypes :"" 
+        };
+    },
+    created() {
+        // 考试课程
+        axios.get("/exam/subject").then(res=>{
+            if(res.data.code === 1){
+                this.allcourse = res.data.data;
+            }
+        });
+        // 考试类型
+        axios.get("/exam/examType").then(res=>{
+            if(res.data.code === 1){
+                this.examTypeList = res.data.data;
+            }
+        });
+        // 题目类型
+        axios.get("/exam/getQuestionsType").then(res=>{
+            if(res.data.code === 1){
+                this.questionTypesList = res.data.data;
+            }
+        });
+    },
+};
+</script>
+<style lang="scss" scoped>
+.questionWrap {
   width: 100%;
-  height: 100%;  
-}
- .box {
-    width: 500px;
-    height: 100%;
-    background:#f4f4f4;
-    position: absolute;
-    top: 0;
-    right:0;
-    line-height: 30px;
-  }
-el-header {
-  background-color: #eee;
-  color: #333;
-  text-align: left;
-}
-el-main {
-  background-color: #fff;
-  color: #333;
-  // height: 400px;
-  border-radius: 20px;
-  flex: auto;
-  min-height: 0;
-  position: relative;
-}
-.style-edit {
-  min-height: 980px;
-  margin: 0 auto;
-  padding: 40px;
-  // text-align: center;
-  position: relative;
-  background: #fff;
+  height: 100%;
   display: flex;
   flex-direction: column;
 }
-.style-edit > h3 {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.questionWrap h1 {
+  font-size: 22px;
+  font-weight: normal;
+  margin-bottom: 30px;
 }
-.style-edit > p {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.allList p {
+  margin-bottom: 20px;
 }
-.item {
-  width: 100%;
- background:#fff;
-  border: 1px solid #ccc;
-  margin-bottom: 2px;
-  display: flex;
-  padding: 10px;
-  justify-content: flex-start;
-  flex-direction: column;
-  position: relative;
-  line-height: 30px;
+.el-input {
+  margin-bottom: 30px;
 }
-.item > span {
-  position: absolute;
-  top: 20px;
-  right: 30px;
-  width: 50px;
-  height: 30px;
-  border: 1px solid #ccc;
-  line-height: 30px;
-  text-align: center;
-  border-radius: 20px;
-  color: red;
+.markdown  {
+  margin-bottom: 30px;
 }
-.item > p {
-  flex-wrap: wrap;
+.el-select{
+  margin-bottom: 30px;
 }
-.item > p:last-child{
-   background: #ccc;
-}
-.cv {
-  text-align: center;
-  margin-top: 50px;
-  font-weight: 900;
+.el-button{
+  background: #093ffd;
 }
 </style>
