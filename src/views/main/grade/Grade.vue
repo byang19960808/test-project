@@ -14,7 +14,7 @@
         <!-- 表单弹层 -->
 
         <!-- 表格 -->
-        <el-table :data="classList"
+        <el-table :data="arr"
                   style="width: 100%">
           <el-table-column prop="grade_name"
                            label="班级名"
@@ -36,11 +36,26 @@
           </el-table-column>
           <!-- 操作 -->
         </el-table>
-        <!-- <Page :item="{total,currentPage,pagesize}" :handleSizeChange="handleSizeChange" :handleCurrentChange="handleCurrentChange"></Page> -->
+       
         <!-- 表格 -->
+         <template>
+	          <el-col :span="24" class="toolbar" style="text-align: center;">
+	          	<el-pagination
+              		  @size-change="handleSizeChange"
+                  	@current-change="handleCurrentChange" 
+                  	:current-page="currentPage"
+                  	:page-sizes="[5, 10, 20]"
+                  	:page-size="pagesize" 
+                  	layout="total, sizes, prev, pager, next, jumper"
+                  	:total="classList.length">
+              </el-pagination>
+	</el-col>
+</template>
       </div>
     </el-main>
+    
   </el-container>
+  
 </template>
 
 <script>
@@ -48,25 +63,30 @@
 import FromMark from "../../../components/alerts/index";
 import axios from "../../../util/axiosAgain"
 import { mapActions, mapState } from 'vuex';
-//公共的分页器
-// import Page from "../../../components/paingdevice/Page"
 export default {
     components: {
-        FromMark,
-        // Page
+        FromMark
     },
     data() {
         return {
             FromFlag: false,
             AllClassRoom:[],
             Allsubject:[],
-            AddorSet:null
+            AddorSet:null,
+            total: 0, // 列表内所有数据的长度
+      		  currentPage: 1, // 初始页
+            pagesize: 5, // 当前页面内的列表行数
+            arr:[]
         };
     },
     computed:{
         ...mapState({
             classList: state=>state.setClass.classList
         })
+    },
+    beforeUpdate() {
+        this.arr = this.classList.slice((this.currentPage - 1) * this.pagesize, this.currentPage * this.pagesize)
+        console.log(this.arr)
     },
     methods: {
         ...mapActions({
@@ -83,6 +103,19 @@ export default {
             localStorage.setItem("grade_id", row.grade_id);
             this.FromFlag = true;
             this.AddorSet = true;
+        },
+        handleSizeChange: function(pagesize) {
+            this.pagesize = pagesize;
+            this.arr = this.classList.slice((this.currentPage - 1) * pagesize, this.currentPage * pagesize)
+            console.log(this.pagesize); // 每页下拉显示数据
+            this.getAllClassRoom();
+        },
+        // 换页：更新列表数据
+        handleCurrentChange: function(currentPage) {
+            this.currentPage = currentPage;
+            this.arr = this.classList.slice((currentPage - 1) * this.pagesize, currentPage * this.pagesize)
+            console.log(this.currentPage); //点击第几页
+            this.getAllClassRoom();
         },
         //删除事件
         handleDelete(index, row) {
@@ -141,8 +174,7 @@ export default {
         }
     },
     created() {
-        this.getIfClassRoom()
-        
+        this.getIfClassRoom()    
     }
 };
 </script>

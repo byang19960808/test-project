@@ -16,7 +16,7 @@
       <el-button type="primary">重置</el-button>
     </div>
     <div>
-      <el-table style="width: 100%" :data="Allstudent">
+      <el-table style="width: 100%" :data="arr">
         <el-table-column prop="student_name" label="姓名" width="180"></el-table-column>
         <el-table-column prop="student_id" label="学号"></el-table-column>
         <el-table-column prop="state" label="班级"> </el-table-column>
@@ -28,8 +28,21 @@
            </template>
         </el-table-column>
       </el-table>
+      <template>
+	          <el-col :span="24" class="toolbar" style="text-align: center;">
+	          	<el-pagination
+              		  @size-change="handleSizeChange"
+                  	@current-change="handleCurrentChange" 
+                  	:current-page="currentPage"
+                  	:page-sizes="[2, 3, 20]"
+                  	:page-size="pagesize" 
+                  	layout="total, sizes, prev, pager, next, jumper"
+                  	:total="Allstudent.length">
+              </el-pagination>
+	</el-col>
+</template>
     </div>
-
+    
   </div>
 
 </template>
@@ -39,13 +52,20 @@ import axios from "../../../util/axiosAgain"
 export default {
     data(){
         return{
-            Allstudent:[]
+            Allstudent:[],
+            total: 0, // 列表内所有数据的长度
+      		  currentPage: 1, // 初始页
+            pagesize: 5, // 当前页面内的列表行数
+            arr:[]
         }
     },
     mounted(){
         axios.get("/manger/student/new").then(res=>{
             this.Allstudent = res.data.data
         })
+    },
+    beforeUpdate() {
+        this.arr = this.Allstudent.slice((this.currentPage - 1) * this.pagesize, this.currentPage * this.pagesize)
     },
     methods:{
         handleDelete(index, row) {
@@ -56,10 +76,22 @@ export default {
                     axios.get("/manger/student/new").then(res=>{
                         this.Allstudent = res.data.data
                     })
-                }
-                
+                }               
             })
-        }
+        },
+        handleSizeChange: function(pagesize) {
+            this.pagesize = pagesize;
+            this.arr = this.Allstudent.slice((this.currentPage - 1) * pagesize, this.currentPage * pagesize)
+            console.log(this.pagesize); // 每页下拉显示数据
+            this.getAllClassRoom();
+        },
+        // 换页：更新列表数据
+        handleCurrentChange: function(currentPage) {
+            this.currentPage = currentPage;
+            this.arr = this.Allstudent  .slice((currentPage - 1) * this.pagesize, currentPage * this.pagesize)
+            console.log(this.currentPage); //点击第几页
+            this.getAllClassRoom();
+        },
     }
 };
 </script>

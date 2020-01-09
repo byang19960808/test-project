@@ -6,7 +6,7 @@
       <p>题干</p>
       <el-input v-model="inputs" maxlength="20" placeholder="请输入题目标题，不超过20个字"></el-input>
       <p>题目主题</p>
-      <mark-down style="height:360px;" />
+      <mark-down style="height:360px;" v-model="values"/>
       <p>请选择考试类型：</p>
       <el-select v-model="examType" placeholder="请选择" style='width:300px'>
         <el-option
@@ -36,8 +36,8 @@
         ></el-option>
       </el-select>
       <p>答案信息</p>
-      <mark-down style="height:360px;" />
-      <el-button type="primary" style='width:150px;'>提交</el-button>
+      <mark-down style="height:360px;" v-model="values2"/>
+      <el-button type="primary" style='width:150px;' @click="subFn">提交</el-button>
     </div>
   </div>
 </template>
@@ -56,7 +56,9 @@ export default {
             examTypeList:[],
             examType:"",
             questionTypesList:[],
-            questiontypes :"" 
+            questiontypes :"",
+            values:"",
+            values2:""
         };
     },
     created() {
@@ -79,6 +81,16 @@ export default {
             }
         });
     },
+    methods:{
+        subFn(){
+            axios.get("/user/userInfo").then(({data})=>{
+                // console.log(data.data.user_id)
+                axios.post("/exam/questions", {questions_type_id:"123", subject_id:"520", exam_id:"8sc5d7-7p5f9e-cb2zii-ahe5i", user_id:data.data.user_id, questions_stem:this.inputs, questions_answer:this.questiontypes, title:this.values}).then(({data})=>{
+                    console.log(data)
+                })
+            })
+        }
+    }
 };
 </script>
 <style lang="scss" scoped>

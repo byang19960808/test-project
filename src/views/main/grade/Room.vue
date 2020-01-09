@@ -8,7 +8,7 @@
                    @click="open">+添加教室</el-button>
         <!-- 添加按钮 -->
         <!-- 表格 -->
-        <el-table :data="AllClassRoom"
+        <el-table :data="arr"
                   style="width: 100%">
           <el-table-column prop="room_text"
                            label="教室号"
@@ -22,9 +22,20 @@
           </el-table-column>
           <!-- 操作 -->
         </el-table>
-    <!-- <Page :item="{total,currentPage,pagesize}" :handleSizeChange="handleSizeChange" :handleCurrentChange="handleCurrentChange"></Page> -->
-
       </div>
+      <template>
+	          <el-col :span="24" class="toolbar" style="text-align: center;">
+	          	<el-pagination
+              		  @size-change="handleSizeChange"
+                  	@current-change="handleCurrentChange" 
+                  	:current-page="currentPage"
+                  	:page-sizes="[5, 8, 15]"
+                  	:page-size="pagesize" 
+                  	layout="total, sizes, prev, pager, next, jumper"
+                  	:total="AllClassRoom.length">
+              </el-pagination>
+	</el-col>
+</template>
     </el-main>
     <!-- 添加弹框组件 --> 
     <OneFrom v-if="FromFlag"
@@ -37,22 +48,27 @@
 <script>
 import { mapActions, mapState } from "vuex";
 import OneFrom from "../../../components/alerts/classset";
-//公共的分页器
-// import Page from "../../../components/paingdevice/Page"
 export default {
     components: {
-        OneFrom,
-        // Page
+        OneFrom
     },
     data() {
         return {
-            FromFlag: false
+            FromFlag: false,
+            total: 0, // 列表内所有数据的长度
+      		  currentPage: 1, // 初始页
+            pagesize: 5, // 当前页面内的列表行数
+            allClass:[],
+            arr:[]
         };
     },
     computed: {
         ...mapState({
             AllClassRoom: state => state.setClass.AllClassRoom
         })
+    },
+    beforeUpdate() {
+        this.arr = this.AllClassRoom.slice((this.currentPage - 1) * this.pagesize, this.currentPage * this.pagesize)
     },
     methods: {
         ...mapActions({
@@ -61,6 +77,19 @@ export default {
         }),
         open() {
             this.FromFlag = true;
+        },
+        handleSizeChange: function(pagesize) {
+            this.pagesize = pagesize;
+            this.arr = this.AllClassRoom.slice((this.currentPage - 1) * pagesize, this.currentPage * pagesize)
+            console.log(this.pagesize); // 每页下拉显示数据
+            this.getAllClassRoom();
+        },
+        // 换页：更新列表数据
+        handleCurrentChange: function(currentPage) {
+            this.currentPage = currentPage;
+            this.arr = this.AllClassRoom.slice((currentPage - 1) * this.pagesize, currentPage * this.pagesize)
+            console.log(this.currentPage); //点击第几页
+            this.getAllClassRoom();
         },
         opens(index, item) {
             this.$confirm('此操作将永久删除, 是否继续?', '提示', {
