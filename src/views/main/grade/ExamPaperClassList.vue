@@ -75,7 +75,6 @@ export default {
             this.arr = this.allClass.slice((this.currentPage - 1) * pagesize, this.currentPage * pagesize)
             console.log(this.pagesize); // 每页下拉显示数据
             this.getUsers();
-
         },
         // 换页：更新列表数据
         handleCurrentChange: function(currentPage) {
