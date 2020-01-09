@@ -9,9 +9,7 @@
     <div v-if="currentIndex === 2"> <h1>api接口权限</h1>  <ApiAuthorityTable :data='tableData'></ApiAuthorityTable></div>
     <div v-if="currentIndex === 3"> <h1>身份和api接口关系</h1>  <UserIdentityTable :data='tableData'></UserIdentityTable></div>
     <div v-if="currentIndex === 4"> <h1>视图接口权限</h1>  <UserViewTable :data='tableData'></UserViewTable></div>
-    <div v-if="currentIndex === 5"> <h1>身份和视图权限关系</h1>  <UserIdentityViewTable :data='tableData'></UserIdentityViewTable></div>
-
-    
+    <div v-if="currentIndex === 5"> <h1>身份和视图权限关系</h1>  <UserIdentityViewTable :data='tableData'></UserIdentityViewTable></div>  
   </div>
 </template>
 

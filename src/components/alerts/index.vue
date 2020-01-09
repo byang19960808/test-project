@@ -2,7 +2,7 @@
    <div class="wrap_mark">
       <div class="mark_from">
            <div class="from-header">
-              <div>添加班级</div>
+              <div>{{AddorSet === true ? "修改班级":"添加班级"}}</div>
              <div><i data-v-79bf621a=""  @click.self="heidenFlag" class="el-icon-close"></i></div>
            </div>
            <div class="from-main">
@@ -32,7 +32,7 @@
 import axios  from "../..//util/axiosAgain"
 import {mapActions} from "vuex"
 export default {
-    props:["AllClassRoom", "Allsubject"],
+    props:["AllClassRoom", "Allsubject", 'AddorSet'],
     data() {
         return {
             ruleForm: { class: "", classroom: "", subject: "" },
@@ -44,8 +44,7 @@ export default {
                 region: [
                     { required: true, message: "请选择活动区域", trigger: "change" }
                 ]
-            },
-            AddorSet: false
+            }
         };
     },
     methods: {
@@ -61,13 +60,13 @@ export default {
             getIfClassRoom:"setClass/getIfClassRoom"
         }),
         submitClick(){
-            if(!this.AddorSet){
+            if(!this.AddorSet){//false添加
                 axios.post("/manger/grade", {grade_name:this.ruleForm.class, room_id:this.ruleForm.classroom, subject_id:this.ruleForm.subject}).then(res=>{
                     alert(res.data.msg)
                     this.heidenFlag()
-                    this.getIfClassRoom()
+                    this.getIfClassRoom();
                 })
-            }else{
+            }else{//true 更新
                 console.log({grade_id:localStorage.getItem("grade_id"), room_id:this.ruleForm.classroom, subject_id:this.ruleForm.subject});
                 axios.put("/manger/grade/update", {
                     grade_id:localStorage.getItem("grade_id"),
@@ -76,7 +75,7 @@ export default {
                 }).then(res=>{
                     console.log(res);
                     this.getIfClassRoom()
-                    this.clearLocal()    
+                    // this.clearLocal()    
                     this.heidenFlag()
                 })
             }
@@ -102,8 +101,7 @@ export default {
     },
     created() {
         this.setruleForm()
-    }
-    
+    }    
 };
 </script>
 <style scoped  lang="scss">

@@ -9,10 +9,10 @@
             下拉菜单<i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>个人中心</el-dropdown-item>
-            <el-dropdown-item>我的班级</el-dropdown-item>
-            <el-dropdown-item>设置</el-dropdown-item>
-            <el-dropdown-item>退出登录</el-dropdown-item>
+            <el-dropdown-item><a href="https://www.alipay.com/">个人中心</a></el-dropdown-item>
+            <el-dropdown-item><a href="https://www.taobao.com/">我的班级</a></el-dropdown-item>
+            <el-dropdown-item><a href="https://www.taobao.com/">设置</a></el-dropdown-item>
+            <el-dropdown-item><a href="/login">退出登录</a></el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </el-header>

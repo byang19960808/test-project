@@ -91,6 +91,12 @@ export default {
             this.arr = this.allClass.slice((this.currentPage - 1) * this.pagesize, this.currentPage * this.pagesize)
             console.log(res)
         })
+        axios.get("/exam/getQuestionsType").then(res=>{
+            if(res.data.code === 1){
+                this.questionTypesList = res.data.data;
+                console.log(this.questionTypesList);
+            }
+        });
     },
 }
 </script>
