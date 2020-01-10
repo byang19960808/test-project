@@ -69,9 +69,7 @@ export default {
                         console.log(res)
                         if(res.data.code === 1){
                             cookie.set('token', res.data.token);
-                            axios.get('/user/Info').then(res=>{
-                                console.log(res)
-                            })
+                            //this.$store.dispatch('FliRoute/userInfo')
                             this.$message({
                                 message: '恭喜你，登录成功！',
                                 type: 'success', 
