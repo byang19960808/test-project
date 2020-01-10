@@ -18,7 +18,11 @@ const routes = [
             { path: 'classlist', component: () => import('../views/main/grade/ExamPaperClassList.vue') },
             { path: 'grade', component: () => import('../views/main/grade/Grade.vue') },
             { path: 'student', component: () => import('../views/main/grade/Student.vue') },
-            { path: 'room', component: () => import('../views/main/grade/Room.vue') },  
+            { path: 'room', component: () => import('../views/main/grade/Room.vue') },
+            {path:"classmate", name:"classmate", component: () => import('../views/main/grade/classmate.vue')},  
+            {path:"detail", name:"detail", component: () => import('../views/main/grade/detail.vue')},  
+            {path:"look_questionsDetail", name:"look_questionsDetail", component: () => import('../views/main/exam/look_questionsDetail.vue')}, 
+            {path:"look_questionsEdit", name:"look_questionsEdit", component: () => import('../views/main/exam/look_questionsEdit.vue')}, 
             { path: 'exam', component: () => import('../views/main/exam/Exam.vue'),
                 children: [ 
                     { path: 'edit', component: ()=> import('../views/main/exam/Edit.vue') }

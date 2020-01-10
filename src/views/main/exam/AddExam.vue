@@ -15,16 +15,6 @@
         <el-form-item label="选择课程" prop="region">
           <el-select v-model="ruleForm.region" placeholder="请选择课程">
              <el-option v-for="(item,index) in subject" :key='index' :label="item.subject_text" :value="item.subject_id"></el-option>
-            <!-- <el-option label="JavaScript上" value="fqtktr-1lq5u"></el-option>
-            <el-option label="JavaScript下" value="wl5yk-38c0g"></el-option>
-            <el-option label="模块化开发" value="8tl7os-r49tld"></el-option>
-            <el-option label="移动端开发" value="1ux00o6-2xbj5i"></el-option>
-            <el-option label="node基础" value="4pu32-vs796l"></el-option>
-            <el-option label="组件化开发(vue)" value="1psw2b-cy7o07(vue)"></el-option>
-            <el-option label="渐进式开发(react)" value="fyu3ln-azjkie(react)"></el-option>
-             <el-option label="项目实战" value="94sjh6-lnlxe"></el-option>
-            <el-option label="JavaScript高级" value="k1gvd4-8lrx8f"></el-option>
-            <el-option label="node高级" value="u3ix15-dd6md"></el-option> -->
           </el-select>
         </el-form-item>
          <el-form-item label="设置题量" prop="num">

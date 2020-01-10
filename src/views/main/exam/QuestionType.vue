@@ -42,7 +42,7 @@
               		  @size-change="handleSizeChange"
                   	@current-change="handleCurrentChange" 
                   	:current-page="currentPage"
-                  	:page-sizes="[2, 3, 5]"
+                  	:page-sizes="[5, 8,10]"
                   	:page-size="pagesize" 
                   	layout="total, sizes, prev, pager, next, jumper"
                   	:total="tableData.length">
@@ -62,7 +62,7 @@ export default {
             input:'',
             total: 0, // 列表内所有数据的长度
       		  currentPage: 1, // 初始页
-            pagesize: 2, // 当前页面内的列表行数
+            pagesize: 56, // 当前页面内的列表行数
             arr:[]
         }
     }, 

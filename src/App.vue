@@ -4,7 +4,7 @@
   </div>
 </template>
 <style>
-/* .main{
+.main{
   overflow: hidden
-} */
+}
 </style>
