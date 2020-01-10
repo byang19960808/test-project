@@ -12,7 +12,7 @@
             <el-dropdown-item><a href="https://www.alipay.com/">个人中心</a></el-dropdown-item>
             <el-dropdown-item><a href="https://www.taobao.com/">我的班级</a></el-dropdown-item>
             <el-dropdown-item><a href="https://www.taobao.com/">设置</a></el-dropdown-item>
-            <el-dropdown-item><a href="/login">退出登录</a></el-dropdown-item>
+            <el-dropdown-item> <span @click="SignOut">退出登录</span></el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </el-header>
@@ -83,7 +83,16 @@
 </template>
 
 <script>
-export default {};
+import cookie from 'js-cookie';
+export default {
+    methods:{
+        SignOut(){
+            cookie.remove('token');
+            localStorage.clear();
+            this.$router.push('/login')
+        }
+    }
+};
 </script>
 <style>
 .main,
@@ -140,7 +149,12 @@ export default {};
   color: #909399;
 }
 .el-menu-item a {
+  display: inline-block;
   color: #ccc;
+  width:100%;
+}
+.el-submenu .el-menu-item{
+  padding: 0;
 }
  .el-dropdown-link {
     cursor: pointer;

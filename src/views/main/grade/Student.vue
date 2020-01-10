@@ -2,18 +2,18 @@
   <div class="studentBox">
     <h2>学生管理</h2>
     <div class="student_cont">
-      <el-input placeholder="请输入学生姓名"></el-input>
-      <el-input placeholder="请输入学生学号"></el-input>
+      <el-input placeholder="请输入学生姓名" v-model="studentName"></el-input>
+      <el-input placeholder="请输入学生学号" v-model="studentNum"></el-input>
       <template>
-        <el-select placeholder="请选择教室号">
-          <el-option></el-option>
+        <el-select placeholder="请选择教室号" v-model="room">
+         <el-option v-for="(item, index) in roomArr"  :key="index" :label='item.room_text' :value="item.room_id"></el-option>
         </el-select>
-        <el-select placeholder="班级名">
-          <el-option></el-option>
+        <el-select placeholder="班级名" v-model="grade">
+         <el-option v-for="(item, index) in gradeArr"  :key="index" :label='item.grade_name' :value="item.grade_id"></el-option>
         </el-select>
       </template>
-      <el-button type="primary">搜索</el-button>
-      <el-button type="primary">重置</el-button>
+      <el-button type="primary" @click="searchBtn">搜索</el-button>
+      <el-button type="primary" @click="resetBtn">重置</el-button>
     </div>
     <div>
       <el-table style="width: 100%" :data="arr">
@@ -56,12 +56,24 @@ export default {
             total: 0, // 列表内所有数据的长度
       		  currentPage: 1, // 初始页
             pagesize: 5, // 当前页面内的列表行数
-            arr:[]
+            arr:[],
+            studentName:'', //学生姓名
+            studentNum:'', //学生名字
+            roomArr:[], //教室数据
+            gradeArr:[], //班级数据
+            room:'', //教室名
+            grade:"", //班级好
         }
     },
     mounted(){
         axios.get("/manger/student/new").then(res=>{
             this.Allstudent = res.data.data
+        })
+        axios.get('/manger/room').then(res=>{
+            this.$data.roomArr = res.data.data
+        })
+        axios.get('/manger/grade').then(res=>{
+            this.$data.gradeArr = res.data.data
         })
     },
     beforeUpdate() {
@@ -92,6 +104,17 @@ export default {
             console.log(this.currentPage); //点击第几页
             this.getAllClassRoom();
         },
+        //搜索
+        searchBtn(){
+
+        },
+        //重置
+        resetBtn(){
+            this.$data.studentName = '';
+            this.$data.studentNum = '';
+            this.$data.room = '';
+            this.$data.grade = '';
+        }
     }
 };
 </script>

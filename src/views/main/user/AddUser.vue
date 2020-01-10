@@ -20,7 +20,7 @@
          <div class="addUser-from">
           <p> <button  class="active">添加身份</button></p>   
           <p>   <el-input v-model="IdentityEdit.edit" placeholder="请输入身份名称"></el-input></p>
-          <p>  <el-button type="primary" @click="IdentityEditBtn">确定</el-button> <br/> <el-button @click="resetForm">重置</el-button> </p>
+          <p>  <el-button type="primary" @click="IdentityEditBtn">确定</el-button> <br/> <el-button @click="IdentityEditreset">重置</el-button> </p>
         </div>
         <!-- 添加api接口权限 -->
          <div class="addUser-from">
@@ -28,7 +28,7 @@
           <p>   <el-input v-model="authorityApi.text1" placeholder="请输入api接口权限名称"></el-input></p>
           <p>   <el-input v-model="authorityApi.text2" placeholder="请输入api接口权限url"></el-input></p>
           <p>   <el-input v-model="authorityApi.text3" placeholder="请输入api接口权限方法"></el-input></p>
-          <p>  <el-button type="primary" @click="authorityApiBtn">确定</el-button> <br/> <el-button @click="resetForm">重置</el-button> </p>
+          <p>  <el-button type="primary" @click="authorityApiBtn">确定</el-button> <br/> <el-button @click="authorityApireset">重置</el-button> </p>
         </div>
         <!-- 添加视图接口权限 -->
          <div class="addUser-from">
@@ -36,7 +36,7 @@
           <p>  <el-select v-model="ruleForm.viewAuthorit" placeholder="请选择已有视图">
             <el-option v-for="(item, index) in viewAuthorit"  :key="index" :label='item.view_authority_text' :value="item"></el-option>
           </el-select></p>
-          <p>  <el-button type="primary" @click="viewAuthoritBtn">确定</el-button> <br/> <el-button @click="resetForm">重置</el-button> </p>
+          <p>  <el-button type="primary" @click="viewAuthoritBtn">确定</el-button> <br/> <el-button @click="viewAuthoritreset">重置</el-button> </p>
         </div>
         <!-- 给身份设置api接口权限 -->
          <div class="addUser-from">
@@ -47,7 +47,7 @@
           <p> <el-select v-model="ruleForm.apiAuthorityIdent" placeholder="请选择api接口权限">
             <el-option v-for="(item, index) in apiAuthority"  :key="index" :label='item.api_authority_text' :value="item.api_authority_id"></el-option>
           </el-select></p>
-          <p>  <el-button type="primary" @click="apiAuthorityBtn">确定</el-button> <br/> <el-button @click="resetForm">重置</el-button> </p>
+          <p>  <el-button type="primary" @click="apiAuthorityBtn">确定</el-button> <br/> <el-button @click="apiAuthorityreset">重置</el-button> </p>
         </div>
         <!-- 给身份设置视图权限 -->
             <div class="addUser-from">
@@ -58,7 +58,7 @@
           <p> <el-select v-model="ruleForm.setViewId" placeholder="请选择视图权限">
             <el-option v-for="(item, index) in viewAuthorit"  :key="index" :label='item.view_authority_text' :value="item.view_id"></el-option>
           </el-select></p>
-          <p>  <el-button type="primary" @click="setIdentityView">确定</el-button>  <el-button @click="resetForm">重置</el-button> </p>
+          <p>  <el-button type="primary" @click="setIdentityView">确定</el-button>  <el-button @click="setIdentityViewreset">重置</el-button> </p>
         </div>
      </div>
   </div>
@@ -228,6 +228,28 @@ export default {
             }else{
                 this.error()
             }
+        },
+        IdentityEditreset(){
+            this.$data.IdentityEdit.edit = '';
+        },
+        authorityApireset(){
+            this.$data.authorityApi.text1 = '';
+            this.$data.authorityApi.text2 = '';
+            this.$data.authorityApi.text3 = '';
+
+
+        },
+        viewAuthoritreset(){
+            this.$data.ruleForm.viewAuthorit = '';
+        },
+        apiAuthorityreset(){
+            this.$data.ruleForm.apiAuthorityUser = '';
+            this.$data.ruleForm.apiAuthorityIdent = '';
+
+        },
+        setIdentityViewreset(){
+            this.$data.ruleForm.setIdentityId = '';
+            this.$data.ruleForm.setViewId = '';
         }
     }
 

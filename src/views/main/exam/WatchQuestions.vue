@@ -2,7 +2,7 @@
   <div class="wrtchQuestions">
       <div class="box">
           <div class="Tab">
-         课程类型: <span v-for="(item,index) in subject" :key="index" @click="btn(index)" :class="[count==index?'col':'']" >
+         课程类型: <span v-for="(item,index) in subject" :key="index" @click="btn(index,item.subject_id)" :class="[count==index?'col':'']" >
           {{item.subject_text}}
           </span>
           </div>
@@ -14,7 +14,7 @@
                   v-for="item in examType"
                   :key="item.exam_id"
                   :label="item.exam_name"
-                  :value="item.exam_name">
+                  :value="item.exam_id">
                 </el-option>
               </el-select>
           </div>
@@ -25,11 +25,11 @@
                   v-for="item in getQuestionsType"
                   :key="item.questions_type_id"
                   :label="item.questions_type_text"
-                  :value="item.questions_type_text">
+                  :value="item.questions_type_id">
                 </el-option>
               </el-select>
           </div>
-            <el-button type="primary" plain><i class="el-icon-search"></i> 查询</el-button>
+            <el-button type="primary" plain @click="query" ><i class="el-icon-search"></i> 查询</el-button>
           </div>
       </div>
       <div class="main">
@@ -83,16 +83,38 @@ export default {
             getQuestionsTypes:"",
             getQuestionsType:[],
             count:-1,
-            value: ''
+            value: '',
+            subjectId:''
         }
     },
     methods:{
-        btn(index){
+        btn(index, id){
             console.log(index)
-            this.count = index
+            this.count = index;
+            this.subjectId = id;
+        },
+        query(){
+            let { subjectId, examTypes, getQuestionsTypes } = this.$data;
+            let obj = {};
+            if(subjectId.trim() !== ''){
+                obj['subject_id'] = subjectId
+            }
+            if(examTypes.trim() !== ''){
+                obj['exam_id'] = examTypes
+            }
+            if(getQuestionsTypes.trim() !== ''){
+                obj['questions_type_id'] = getQuestionsTypes
+            }
+            if(subjectId.trim() !== '' || examTypes.trim() !== '' || getQuestionsTypes.trim() !== ''){
+                axios.get('/exam/questions/condition', {...obj}).then((res)=>{
+                    this.questions = res.data.data
+                })
+            }
         }
     }
 }
+//http://127.0.0.1:7001/exam/questions/condition?subject_id=&exam_id=jpg8y9-zbzt7o-jpvuhf-fwnjvr&questions_type_id=fwf0t-wla1q
+//http://localhost:8080/api/exam/questions/condition?exam_id=jpg8y9-zbzt7o-jpvuhf-fwnjvr&getQuestionsTypes=fwf0t-wla1q
 </script>
 
 <style lang="scss" scoped>
