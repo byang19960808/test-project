@@ -125,7 +125,10 @@ export default {
         
     },
     mounted() {
-        this.List = this.data
+        http.get("/exam/questions/new").then(res=>{
+            this.List = res.data.data
+        })
+        
     },
     computed: {
         ...mapState("Check", ["data"])
@@ -143,7 +146,7 @@ export default {
   
 // }
 .box_top {
-  width: 97%;
+  width: 100%;
   height: 210px;
   margin: 0 auto;
   background: #fff;
@@ -292,7 +295,7 @@ export default {
   background-color: #fff;
 }
 .el-tabs__item{
-  padding: 0 15px;
+  padding: 0 9px;
 }
 
 </style>

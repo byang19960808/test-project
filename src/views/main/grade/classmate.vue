@@ -111,12 +111,12 @@ header{
     padding: 24px;
     height: 80px;
     width: 90%;
-    margin: 50px 70px 20px;
+    margin: 30px 50px 20px;
     border-radius: 10px;
     display: flex;
     align-items: center;
     div{
-      margin-left: 40px;
+      margin-left: 20px;
       width: 400px;
       display: flex;
       span{
@@ -128,7 +128,6 @@ header{
     }
 }
 .btn{
-  margin-left: 50px;
   width: 120px;
 }
 main{
@@ -138,7 +137,7 @@ main{
   width: 90%;
   border-radius: 10px;
   background: #fff;
-  margin: 50px 70px 20px;
+  margin: 30px 50px 20px;
   padding: 30px;
 }
 </style>

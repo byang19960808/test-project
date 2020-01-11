@@ -51,13 +51,13 @@ export default {
 .box_ {
   width: 100%;
   height: 865px;
-  overflow: auto;
 }
 .container{
   width: 97%;
   height: 100%;
   margin: 0 auto;
   display: flex;
+
   .left{
     flex: 7;
     background: #fff;
