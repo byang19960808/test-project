@@ -8,12 +8,12 @@
       <p>题目主题</p>
       <mark-down style="height:360px;" v-model="values"/>
       <p>请选择考试类型：</p>
-      <el-select v-model="examType" placeholder="请选择" style='width:300px'>
+      <el-select v-model="examType" placeholder="请选择" style='width:300px' >
         <el-option
           v-for="item in examTypeList"
         :key="item.exam_id"
         :label="item.exam_name"
-        :value="item.exam_name"
+        :value="item.exam_id"
         ></el-option>
       </el-select>
       
@@ -23,7 +23,7 @@
         v-for="item in allcourse"
         :key="item.subject_id"
         :label="item.subject_text"
-        :value="item.subject_text"
+        :value="item.subject_id"
         ></el-option>
       </el-select>
       <p>请选择题目类型：</p>
@@ -32,13 +32,24 @@
         v-for="item in questionTypesList"
         :key="item.questions_type_id"
         :label="item.questions_type_text"
-        :value="item.questions_type_text"
+        :value="item.questions_type_id"
         ></el-option>
       </el-select>
       <p>答案信息</p>
       <mark-down style="height:360px;" v-model="values2"/>
       <el-button type="primary" style='width:150px;' @click="subFn">提交</el-button>
     </div>
+    <el-dialog
+      title="提示"
+      :visible.sync="dialogVisible"
+      width="30%"
+      :before-close="handleClose">
+      <span>这是一段信息</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="SureSubFn">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -58,7 +69,8 @@ export default {
             questionTypesList:[],
             questiontypes :"",
             values:"",
-            values2:""
+            values2:"",
+            dialogVisible: false
         };
     },
     created() {
@@ -82,13 +94,41 @@ export default {
         });
     },
     methods:{
-        subFn(){
-            axios.get("/user/userInfo").then(({data})=>{
-                // console.log(data.data.user_id)
-                axios.post("/exam/questions", {questions_type_id:"123", subject_id:"520", exam_id:"8sc5d7-7p5f9e-cb2zii-ahe5i", user_id:data.data.user_id, questions_stem:this.inputs, questions_answer:this.questiontypes, title:this.values}).then(({data})=>{
-                    console.log(data)
+        SureSubFn(){
+            let {examType, course, questiontypes, values, values2, inputs } = this.$data
+            if(examType.trim() !== '' && course.trim() !== '' && questiontypes.trim() !== '' && values.trim() !== '' && values2.trim() !== '' && inputs.trim() !== ''){
+                axios.get("/user/userInfo").then(({data})=>{
+                    // console.log(data.data.user_id)
+                    axios.post("/exam/questions", {questions_type_id:questiontypes, subject_id:course, exam_id:examType, user_id:data.data.user_id, questions_stem:this.inputs, questions_answer:this.values2, title:this.values}).then(({data})=>{
+                        this.$message({
+                            message: data.msg,
+                            type: data.code === 1 ? "success" : "warning"
+                        });
+                        this.$data.dialogVisible = false;
+                    })
                 })
-            })
+            }else{
+                this.$message({
+                    message: '不能为空',
+                    type:"warning"
+                });
+                this.$data.dialogVisible = false;
+            }
+
+        },
+        handleClose(done) {
+            console.log(123)
+            this.$confirm('确认关闭？')
+                .then(a => {
+                    console.log(123, a)
+                    done();
+                })
+                .catch(a => {
+                    console.log(111, a)
+                });
+        },
+        subFn(){
+            this.$data.dialogVisible = true;
         }
     }
 };

@@ -1,55 +1,58 @@
 <template>
-    <div class="box_">
-         <p class="management">查看试题</p>
-              <div class="box_top">
-                    <div class="box-con">
-                      <span>课程类型 ： </span>
-                    <el-tabs  @tab-click="handleClick">
-                      <el-tab-pane :label="item"  v-for="(item,index) in date" :key="index"></el-tab-pane>
-                    </el-tabs>
-                    </div>
-                       <div class="box_con">
-                        <div class="left_box"> 
-                            <span>考试类型 : </span>
-                            <el-select v-model="value" placeholder="请选择" class="select" style="width: 300px;">
-                                <el-option
-                                  v-for="(item, index) in addexamType"
-                                  :key="index"
-                                  :label="item.exam_name"
-                                  :value="item.exam_name">
-                                </el-option>
-                              </el-select>
-                         </div>
-                          <div class="right_box"> 
-                                 <span>题目类型 : </span>
-                                <el-select v-model="Value" placeholder="请选择" class="select" style="width: 300px;">
-                                  <el-option
-                                    v-for="item in Questions"
-                                    :key="item.value"
-                                    :label="item.questions_type_text"
-                                    :value="item.questions_type_text">
-                                  </el-option>
-                                </el-select>
-                          </div>
-                           <el-button type="primary" icon="el-icon-search" class="btn" @click="Search">搜索</el-button>
-                            <el-button type="primary" class="btn" @click="Reset">重置</el-button>
-                      </div>
-              </div>
-           
-          <div class="box_bottom">
-           <ul class="list" v-if="List.length">
-             <li v-for="(item,index) in List" :key="index" >
-               <div @click="fn(item)"><p>{{item.title}}</p><p><span>{{item.questions_type_text}}</span><span>{{item.subject_text}}</span><span>{{item.exam_name}}</span></p>
-               <p><span>{{item.user_name}}</span><span>发布 </span></p>
-               </div>
-               <div @click="questionClick(item)">编辑</div>
-             </li>
-           </ul>
-           <ul class="list" v-else>
-             <li class="newLi">没有数据</li>
-           </ul>
-         </div>
-    </div>
+  <div class="wrtchQuestions">
+      <div class="box">
+          <div class="Tab">
+         课程类型: <span v-for="(item,index) in subject" :key="index" @click="btn(index,item.subject_id)" :class="[count==index?'col':'']" >
+          {{item.subject_text}}
+          </span>
+          </div>
+          <div class="check">
+          <div>
+            考试类型：
+              <el-select v-model="examTypes" placeholder="请选择">
+                <el-option
+                  v-for="item in examType"
+                  :key="item.exam_id"
+                  :label="item.exam_name"
+                  :value="item.exam_id">
+                </el-option>
+              </el-select>
+          </div>
+          <div>
+           题目类型：
+              <el-select v-model="getQuestionsTypes" placeholder="请选择">
+                <el-option
+                  v-for="item in getQuestionsType"
+                  :key="item.questions_type_id"
+                  :label="item.questions_type_text"
+                  :value="item.questions_type_id">
+                </el-option>
+              </el-select>
+          </div>
+            <el-button type="primary" plain @click="query" ><i class="el-icon-search"></i> 查询</el-button>
+          </div>
+      </div>
+      <div class="main">
+      <div class="main-itmes" v-for="(item,index) in questions" :key="index">
+       <div class="let">
+        <p>
+          {{item.title}}
+        </p>
+        <div>
+          <span>{{item.questions_type_text}}</span>
+          <span>{{item.subject_text}}</span>
+          <span>{{item.exam_name}}</span>
+        </div>
+        <p>
+        {{item.user_name}}&nbsp;发布
+        </p>
+       </div>
+       <div class="rig">
+        编辑
+       </div>
+      </div>
+      </div>
+  </div>
 </template>
 
 <script>
@@ -57,80 +60,46 @@ import {mapActions, mapState} from 'vuex'
 import http from '../../../util/axiosAgain';
 export default {
     data(){
-        return {
-            activeName: 'second',
-            addexamType:[],
-            management:[],
-            Questions:[],
-            date:["All", "javaScript上", 'javaScript下', '模块化开发移动端开发', 'node基础组件化开发', '(vue)渐进式开发', '(react)项目实战', 'javaScript高级', 'node高级'],
-            options: [],
+        return{
+            subject:[],
+            examTypes:"",
+            examType:[],
+            questions:[],
+            getQuestionsTypes:"",
+            getQuestionsType:[],
+            count:-1,
             value: '',
-            Value:'',
-            List:this.data,
-            tab:'All'
+            subjectId:''
         }
     },
-    methods: {
-        ...mapActions("Check", ["gitCheck", "getQuestions"]),
-        handleClick(tab) {
-            console.log(tab.label);
-            this.tab = tab.label
+    methods:{
+        btn(index, id){
+            console.log(index)
+            this.count = index;
+            this.subjectId = id;
         },
-        fn(item){
-            this.$router.push({name:"look_questionsDetail", params:{name:item}})     
-        },
-        questionClick(item){
-            this.$router.push({name:"look_questionsEdit", params:{id:item}})   
-        },
-        getoption(){//获取配置项
-            http.get('/exam/subject').then(res=>{//所有的课程
-                if(res.data.code === 1){
-                    this.management = res.data.data;
-                    
-                }
-            });
-            http.get('/exam/examType').then(res=>{//考试类型
-                if(res.data.code === 1){
-                    this.addexamType = res.data.data;
-                }
-            });
-            http.get('/exam/getQuestionsType').then(res=>{// 题目类型
-                if(res.data.code === 1){
-                    this.Questions = res.data.data
-                }
-            })
-        },   
-        Search(){
-            let arr = this.data.filter(item=>item.exam_name.includes(this.value) && item.questions_type_text.includes(this.Value))
-            this.List = arr
-            if(this.tab !== "All"){
-                let newArr = this.data.filter(item=>item.subject_text.includes(this.tab) && item.exam_name.includes(this.value) && item.questions_type_text.includes(this.Value))
-                console.log(newArr, this.data)
-                this.List = newArr
+        query(){
+            let { subjectId, examTypes, getQuestionsTypes } = this.$data;
+            let obj = {};
+            if(subjectId.trim() !== ''){
+                obj['subject_id'] = subjectId
             }
-
-        },
-        Reset(){
-            this.value = ""
-            this.Value = ""
-            if(this.tab === "All"){
-                this.List = this.data
+            if(examTypes.trim() !== ''){
+                obj['exam_id'] = examTypes
             }
-        }   
-    },
-    created() {
-        this.gitCheck()
-        this.getoption()
-        
-        
-    },
-    mounted() {
-        this.List = this.data
-    },
-    computed: {
-        ...mapState("Check", ["data"])
-    },
+            if(getQuestionsTypes.trim() !== ''){
+                obj['questions_type_id'] = getQuestionsTypes
+            }
+            if(subjectId.trim() !== '' || examTypes.trim() !== '' || getQuestionsTypes.trim() !== ''){
+                axios.get('/exam/questions/condition', {...obj}).then((res)=>{
+                    this.questions = res.data.data
+                })
+            }
+        }
+    }
 }
+//http://127.0.0.1:7001/exam/questions/condition?subject_id=&exam_id=jpg8y9-zbzt7o-jpvuhf-fwnjvr&questions_type_id=fwf0t-wla1q
+//http://localhost:8080/api/exam/questions/condition?exam_id=jpg8y9-zbzt7o-jpvuhf-fwnjvr&getQuestionsTypes=fwf0t-wla1q
 </script>
 
 <style lang="scss" scoped>

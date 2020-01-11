@@ -1,11 +1,4 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router';
-//import Vuex from '../store/index'
-
-Vue.use(VueRouter)
-
-const routes = [
-    {path: '/login', name: 'login', component: () => import('../views/Login.vue') },
+export const filteRouter = [//管理员  出题者  浏览者
     {
         path: '/main', name: 'main', component: () => import('../views/Main.vue'), meta:{ auther:['管理员', '出题者', '浏览者'] },
         children: [
@@ -26,18 +19,5 @@ const routes = [
                 ]
             }
         ]
-    },
-    { path: '/', redirect: '/login' }
+    }
 ]
-
-const router = new VueRouter({ mode: 'history', base: process.env.BASE_URL, routes })
-
-// router.beforeEach((to, _, next)=>{
-//     if(Vuex.state.FilterMethod.defaultRouter){
-//         next()
-//     }
-//     console.log(Vuex.state.FilterMethod.defaultRouter, next)
-//     next('/login')
-// })
-
-export default router

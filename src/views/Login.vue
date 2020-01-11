@@ -68,10 +68,12 @@ export default {
                     axios.post('/user/login', {'user_name':UserName, "user_pwd":UserPwd }).then((res)=>{
                         console.log(res)
                         if(res.data.code === 1){
-                            cookie.set('token', res.data.token)
+                            cookie.set('token', res.data.token);
+                            //this.$store.dispatch('FliRoute/userInfo')
                             this.$message({
                                 message: '恭喜你，登录成功！',
                                 type: 'success', 
+                                duration:1000,
                                 onClose:function(){ _this.$router.push('/main') }
                             });
                         }

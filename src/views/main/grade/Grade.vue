@@ -74,7 +74,7 @@ export default {
             Allsubject:[],
             AddorSet:null,
             total: 0, // 列表内所有数据的长度
-      		  currentPage: 1, // 初始页
+      		currentPage: 1, // 初始页
             pagesize: 5, // 当前页面内的列表行数
             arr:[]
         };
