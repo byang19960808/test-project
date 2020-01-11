@@ -179,8 +179,7 @@ export default {
 <style lang="scss" scoped>
 .box_ {
   width: 100%;
-  height: 865px;
-  overflow: auto;
+  height: 865px
 }
 .item{
     width: 97%;

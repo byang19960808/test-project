@@ -24,7 +24,7 @@
         <el-table-column prop="student_pwd"  label="密码"></el-table-column>
         <el-table-column label="操作">
            <template slot-scope="scope">
-              <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+              <el-button size="mini" type="danger"  @click="open(scope.$index, scope.row)">删除</el-button>
            </template>
         </el-table-column>
       </el-table>
@@ -55,7 +55,7 @@ export default {
             Allstudent:[],
             total: 0, // 列表内所有数据的长度
       		  currentPage: 1, // 初始页
-            pagesize: 5, // 当前页面内的列表行数
+            pagesize: 8, // 当前页面内的列表行数
             arr:[],
             studentName:'', //学生姓名
             studentNum:'', //学生名字
@@ -80,41 +80,56 @@ export default {
         this.arr = this.Allstudent.slice((this.currentPage - 1) * this.pagesize, this.currentPage * this.pagesize)
     },
     methods:{
-        handleDelete(index, row) {
-            axios.delete(`/manger/student/${row.student_id}`).then(res=>{
-                console.log(index, row, res);
-                if(res.data.code === 1){
-                    alert(res.data.msg)
-                    axios.get("/manger/student/new").then(res=>{
-                        this.Allstudent = res.data.data
-                    })
-                }               
-            })
-        },
-        handleSizeChange: function(pagesize) {
-            this.pagesize = pagesize;
-            this.arr = this.Allstudent.slice((this.currentPage - 1) * pagesize, this.currentPage * pagesize)
-            console.log(this.pagesize); // 每页下拉显示数据
-        },
-        // 换页：更新列表数据
-        handleCurrentChange: function(currentPage) {
-            this.currentPage = currentPage;
-            this.arr = this.Allstudent  .slice((currentPage - 1) * this.pagesize, currentPage * this.pagesize)
-            console.log(this.currentPage); //点击第几页
-        },
-        //搜索
-        searchBtn(){
-
-        },
-        //重置
-        resetBtn(){
-            this.$data.studentName = '';
-            this.$data.studentNum = '';
-            this.$data.room = '';
-            this.$data.grade = '';
+        open(index, row) {
+            this.$confirm('将永久删除该文件, 是否继续?', '删除', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning',
+                center: true
+            }).then(() => {
+                axios.delete(`/manger/student/${row.student_id}`).then(res=>{
+                    console.log(index, row, res)
+                    if(res.data.code === 1){
+                        this.$message({
+                            type: 'success',
+                            message: '删除成功!'
+                        })
+                        axios.get("/manger/student/new").then(res=>{
+                            this.Allstudent = res.data.data
+                        })
+                    }               
+                })
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消删除'
+                });
+            });
         }
+    },
+    handleSizeChange: function(pagesize) {
+        this.pagesize = pagesize;
+        this.arr = this.Allstudent.slice((this.currentPage - 1) * pagesize, this.currentPage * pagesize)
+        console.log(this.pagesize); // 每页下拉显示数据
+    },
+    // 换页：更新列表数据
+    handleCurrentChange: function(currentPage) {
+        this.currentPage = currentPage;
+        this.arr = this.Allstudent  .slice((currentPage - 1) * this.pagesize, currentPage * this.pagesize)
+        console.log(this.currentPage); //点击第几页
+    },
+    //搜索
+    searchBtn(){
+
+    },
+    //重置
+    resetBtn(){
+        this.$data.studentName = '';
+        this.$data.studentNum = '';
+        this.$data.room = '';
+        this.$data.grade = '';
     }
-};
+}
 </script>
 <style scoped>
 .studentBox {

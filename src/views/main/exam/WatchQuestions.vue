@@ -145,7 +145,6 @@ export default {
   border-radius: 10px;
   overflow: hidden;
   font-size: 14px;
-  
   .box-con{
      width: 100%;
      height: 30px;
