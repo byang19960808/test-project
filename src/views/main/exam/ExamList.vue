@@ -1,11 +1,9 @@
 <template>
-    <div class="exam_item">
-        <h2 class="management">试卷列表</h2>
+    <div class="exam_item box_">
+        <h2 class="management">考试列表</h2>
          <header>
-
-            <!-- 考试类型 -->
            <div >
-            <span>考试类型 ：</span>
+            <span>考试类型:</span>
              <el-select v-model="type" placeholder="请选择" style="width:500px">
               <el-option
                 v-for="item in addexamType"
@@ -16,11 +14,8 @@
               </el-option>
             </el-select>
            </div>
-           <!-- 考试类型 -->
-
-           <!-- 课程 -->
            <div>
-             <span>课程 ：</span>
+             <span>课程:</span>
              <el-select v-model="manga" placeholder="请选择" style="width:500px">
               <el-option
                 v-for="item in management"
@@ -30,7 +25,6 @@
               </el-option>
             </el-select>
            </div>
-           <!-- 课程 -->
 
             <el-button type="primary" icon="el-icon-search" class="btn" @click="search">搜索</el-button>
 
@@ -42,11 +36,10 @@
                     <el-button v-for="(v,i) in btn" :key="i" @click="tabtn(i)">{{v}}</el-button>
                 </el-button-group>
             </p>
-            <!-- 表格 -->
             <el-table
                 :data="tableData"
                 style="width: 97%;margin:0 auto;border-radius:3px;"
-                :header-cell-style="{'background':'#d8d8d8'}"
+                :header-cell-style="{'background':'#F4F7F9'}"
                 >
                 <el-table-column
                 label="试卷信息"
@@ -81,18 +74,16 @@
                     <el-button
                     size="small"
                     type="text"
-                    @click="handleEdit(scope.$index, scope.row)">详情</el-button>
+                    @click="handleEdit(scope.row)">详情</el-button>
                 </template>
                 </el-table-column>
             </el-table>
-            <!-- 表格 -->
         </div>
     </div>
 </template>
 
 <script>
-import http from '../../../util/axiosAgain'
-// import moment from 'moment'
+import axios from '../../../util/axiosAgain'
 export default {
     data(){
         return {
@@ -107,34 +98,25 @@ export default {
         }
     },
     methods:{
-        getoption(){//获取配置项
-            http.get('/exam/subject').then(res=>{//所有的课程
+        getoption(){
+            axios.get('/exam/subject').then(res=>{
                 if(res.data.code === 1){
-                    // console.log(res.data)
                     this.management = res.data.data;
                 }
             });
-            http.get('/exam/examType').then(res=>{//考试类型
+            axios.get('/exam/examType').then(res=>{
                 if(res.data.code === 1){
-                    // console.log(res.data)
                     this.addexamType = res.data.data;
                 }
             });
-            // http.get('/exam/getQuestionsType').then(res=>{
-            //     if(res.data.code === 1){
-            //         // console.log(res.data)
-            //     }
-            // })
         },
-        getexamlist(){//获取试卷列表
-            http.get('/exam/exam').then(res=>{
-                console.log(res.data);
+        getexamlist(){
+            axios.get('/exam/exam').then(res=>{
                 this.tableData = res.data.exam;
                 this.newdata = res.data.exam;
             })
         },
-        timeFn(row, column){//格式时间
-            // console.log(row, column, cellValue, index)
+        timeFn(row, column){
             const daterc = row[column.property]
             if(daterc !== null){
                 const dateMat = new Date(parseInt(daterc.replace("/Date(", "").replace(")/", ""), 10));
@@ -147,21 +129,23 @@ export default {
                 const timeFormat = year + "-" + month + "-" + day + " " + hh + ":" + mm + ":" + ss;
                 return timeFormat;
             }
-            // return  moment(daterc).format('YYYY-MM-DD h:mm:ss')
         },
-        tabtn(index){//切换按钮
+        tabtn(index = 0){
             console.log(index)
+            this.curindex = index;
         },
-        search(){//搜索
-            if(this.type && this.manga){//subject_id  exam_type
-                console.log(this.type, this.manga);                
-                let searchdata = this.tableData.filter(v=>{
+        search(){
+            if(this.type && this.manga){//subject_id  exam_type            
+                let searchdata = this.newdata.filter(v=>{
                     if(v.subject_id === this.manga && v.exam_type === this.type){
                         return v;
                     }
                 })
                 this.tableData = searchdata;
             }
+        },
+        handleEdit(row){
+            this.$router.push({path:'/main/examlistdetial', query:{id:row.exam_exam_id}})
         }
     },
     created(){
@@ -172,9 +156,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.exam_item{
-    width: 100%;
+.box_ {
+  width: 100%;
+  height: 865px;
+  overflow: auto;
 }
+
 .box-con{
   background: #eee;
 }
@@ -218,12 +205,16 @@ header{
     justify-content: space-between;
     margin: 0 auto;
 }
-.management {
+
+</style>
+<style>
+  .management {
   width: 97%;
   height: 85px;
   margin: 0 auto;
   line-height: 85px;
   font-size: 25px;
-  color: #000;
+  font-weight:600; 
+  font-family: "华文新魏";
 }
 </style>

@@ -41,8 +41,6 @@ const actions = {
     },
     async getIfClassRoom({commit}){
         let res = await getIfClassRoom()
-        // let num = 0
-        // console.log(res.data.data, num++);
         commit("setclassList", res.data.data)
     }
 }

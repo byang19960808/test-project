@@ -131,17 +131,9 @@ export default {
         ...mapState("Check", ["data"])
     },
 }
-//http://127.0.0.1:7001/exam/questions/condition?subject_id=&exam_id=jpg8y9-zbzt7o-jpvuhf-fwnjvr&questions_type_id=fwf0t-wla1q
-//http://localhost:8080/api/exam/questions/condition?exam_id=jpg8y9-zbzt7o-jpvuhf-fwnjvr&getQuestionsTypes=fwf0t-wla1q
 </script>
 
 <style lang="scss" scoped>
-// .box_ {
-//   width: 100%;
-//   height: 865px;
-//   overflow: auto;
-  
-// }
 .box_top {
   width: 97%;
   height: 210px;

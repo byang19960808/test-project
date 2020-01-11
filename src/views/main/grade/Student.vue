@@ -95,14 +95,12 @@ export default {
             this.pagesize = pagesize;
             this.arr = this.Allstudent.slice((this.currentPage - 1) * pagesize, this.currentPage * pagesize)
             console.log(this.pagesize); // 每页下拉显示数据
-            this.getAllClassRoom();
         },
         // 换页：更新列表数据
         handleCurrentChange: function(currentPage) {
             this.currentPage = currentPage;
             this.arr = this.Allstudent  .slice((currentPage - 1) * this.pagesize, currentPage * this.pagesize)
             console.log(this.currentPage); //点击第几页
-            this.getAllClassRoom();
         },
         //搜索
         searchBtn(){

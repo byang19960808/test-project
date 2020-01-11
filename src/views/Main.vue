@@ -98,8 +98,9 @@ export default {
 .main,
 .el-container {
   width: 100%;
-  height: 100%;
-   overflow: none !important;
+  /* height: 100%; */
+   /* overflow: none !important; */
+   overflow: hidden;
 }
 
 .el-header {
