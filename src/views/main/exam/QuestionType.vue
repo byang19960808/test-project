@@ -42,7 +42,7 @@
               		  @size-change="handleSizeChange"
                   	@current-change="handleCurrentChange" 
                   	:current-page="currentPage"
-                  	:page-sizes="[2, 3, 5]"
+                  	:page-sizes="[5, 8,10]"
                   	:page-size="pagesize" 
                   	layout="total, sizes, prev, pager, next, jumper"
                   	:total="tableData.length">

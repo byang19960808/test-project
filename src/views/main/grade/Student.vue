@@ -34,7 +34,7 @@
               		  @size-change="handleSizeChange"
                   	@current-change="handleCurrentChange" 
                   	:current-page="currentPage"
-                  	:page-sizes="[2, 3, 20]"
+                  	:page-sizes="[8, 15, 20]"
                   	:page-size="pagesize" 
                   	layout="total, sizes, prev, pager, next, jumper"
                   	:total="Allstudent.length">
