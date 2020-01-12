@@ -41,7 +41,7 @@ export default {
 <style scoped lang="scss">
 .box_ {
   width: 100%;
-  height: 865px
+  height: 865px;
 }
 .container{
   width: 97%;

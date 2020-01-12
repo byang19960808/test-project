@@ -179,7 +179,7 @@ export default {
 <style lang="scss" scoped>
 .box_ {
   width: 100%;
-  height: 865px
+  height: 865px;
 }
 .item{
     width: 97%;
