@@ -66,7 +66,7 @@ export default {
         }
     },
     mounted(){
-        axios.get("/manger/student/new").then(res=>{
+        axios.get("/manger/student").then(res=>{
             this.Allstudent = res.data.data
         })
         axios.get('/manger/room').then(res=>{
