@@ -19,11 +19,12 @@
       <el-table style="width: 100%" :data="arr">
         <el-table-column prop="student_name" label="姓名" width="180"></el-table-column>
         <el-table-column prop="student_id" label="学号"></el-table-column>
-        <el-table-column prop="state" label="班级"> </el-table-column>
+        <el-table-column prop="grade_name" label="班级"> </el-table-column>
         <el-table-column prop="room_text" label="教室"></el-table-column>
         <el-table-column prop="student_pwd"  label="密码"></el-table-column>
         <el-table-column label="操作">
            <template slot-scope="scope">
+              <!-- <el-button size="mini" type="danger" @click="DeleteBtn">删除</el-button> -->
               <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
            </template>
         </el-table-column>
@@ -42,7 +43,17 @@
 	</el-col>
 </template>
     </div>
-    
+      <el-dialog
+  title="提示"
+  :visible.sync="dialogVisible"
+  width="30%"
+  :before-close="handleClose">
+  <span>确认删除吗？ 这将永久删除此条数据</span>
+  <span slot="footer" class="dialog-footer">
+    <el-button @click="dialogVisibleClose">取 消</el-button>
+    <el-button type="primary" @click="DeleteId">确 定</el-button>
+  </span>
+</el-dialog>
   </div>
 
 </template>
@@ -55,7 +66,7 @@ export default {
             Allstudent:[],
             total: 0, // 列表内所有数据的长度
       		  currentPage: 1, // 初始页
-            pagesize: 5, // 当前页面内的列表行数
+            pagesize: 8, // 当前页面内的列表行数
             arr:[],
             studentName:'', //学生姓名
             studentNum:'', //学生名字
@@ -63,11 +74,15 @@ export default {
             gradeArr:[], //班级数据
             room:'', //教室名
             grade:"", //班级好
+            dialogVisible: false,
+            student_id:"",
+            cloneAllstudent:[]
         }
     },
     mounted(){
-        axios.get("/manger/student/new").then(res=>{
-            this.Allstudent = res.data.data
+        axios.get("/manger/student").then(res=>{
+            this.Allstudent = res.data.data;
+            this.$data.cloneAllstudent = [...res.data.data]
         })
         axios.get('/manger/room').then(res=>{
             this.$data.roomArr = res.data.data
@@ -81,12 +96,22 @@ export default {
     },
     methods:{
         handleDelete(index, row) {
-            axios.delete(`/manger/student/${row.student_id}`).then(res=>{
-                console.log(index, row, res);
+            this.$data.dialogVisible = true;
+            this.$data.student_id = row.student_id
+            
+        },
+        dialogVisibleClose(){
+            this.$data.dialogVisible = false;
+            this.$data.student_id = ''
+        },
+        DeleteId(){
+            let {student_id } = this.$data;
+            axios.delete(`/manger/student/${student_id}`).then(res=>{
                 if(res.data.code === 1){
-                    alert(res.data.msg)
-                    axios.get("/manger/student/new").then(res=>{
+                    axios.get("/manger/student").then(res=>{
                         this.Allstudent = res.data.data
+                        this.$data.cloneAllstudent = [...res.data.data]
+                        this.$data.dialogVisible = false;
                     })
                 }               
             })
@@ -94,16 +119,34 @@ export default {
         handleSizeChange: function(pagesize) {
             this.pagesize = pagesize;
             this.arr = this.Allstudent.slice((this.currentPage - 1) * pagesize, this.currentPage * pagesize)
-            console.log(this.pagesize); // 每页下拉显示数据
+            //console.log(this.pagesize); // 每页下拉显示数据
         },
         // 换页：更新列表数据
         handleCurrentChange: function(currentPage) {
             this.currentPage = currentPage;
             this.arr = this.Allstudent  .slice((currentPage - 1) * this.pagesize, currentPage * this.pagesize)
-            console.log(this.currentPage); //点击第几页
+            //console.log(this.currentPage); //点击第几页
         },
         //搜索
         searchBtn(){
+            let ArrStudent = [];
+            let { room, grade, studentName, studentNum} = this.$data;
+            this.$data.cloneAllstudent.forEach(item => {
+                if(item.student_name === studentName){
+                    ArrStudent.push(item)
+                }
+                if(item.grade_id === grade ){
+                    ArrStudent.push(item)
+                }
+                if(item.room_id === room){
+                    ArrStudent.push(item)
+                }
+                
+                if(item.student_id === studentNum){
+                    ArrStudent.push(item)
+                }
+            });
+            this.Allstudent = ArrStudent;
 
         },
         //重置
@@ -112,6 +155,21 @@ export default {
             this.$data.studentNum = '';
             this.$data.room = '';
             this.$data.grade = '';
+            axios.get("/manger/student").then(res=>{
+                this.Allstudent = res.data.data;
+                this.$data.cloneAllstudent = [...res.data.data]
+            })
+        },
+        handleClose(done) {
+            this.$confirm('确认关闭？')
+                .then(a => {
+                    console.log(a)
+                    done();
+                })
+                .catch(a => {
+                    console.log(a)
+                });
+                
         }
     }
 };

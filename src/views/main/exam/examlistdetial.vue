@@ -42,7 +42,6 @@ export default {
 .box_ {
   width: 100%;
   height: 865px;
-  overflow: auto;
 }
 .container{
   width: 97%;
